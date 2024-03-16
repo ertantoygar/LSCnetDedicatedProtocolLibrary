@@ -1,7 +1,6 @@
 package tr.com.logidex.cnetdedicated.app;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortIOException;
 import tr.com.logidex.cnetdedicated.device.DataBlock;
 import tr.com.logidex.cnetdedicated.device.DataType;
 import tr.com.logidex.cnetdedicated.device.Tag;
@@ -12,6 +11,7 @@ import tr.com.logidex.cnetdedicated.device.RegisteredDataBlock;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoAcknowledgeMessageFromThePLCException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
@@ -132,7 +132,7 @@ public class XGBCNetClient {
 
 
 
-    public synchronized void registerDevicesToMonitor(List<Tag> tags, String registrationNumber) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized void registerDevicesToMonitor(List<Tag> tags, String registrationNumber) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
         StringBuilder data = new StringBuilder();
         data.append(String.format("%02x", tags.size()));
 
@@ -161,7 +161,7 @@ public class XGBCNetClient {
 
     }
 
-    public synchronized List<Tag> executeRegisteredDeviceToMonitor(String registrationNumber) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized List<Tag> executeRegisteredDeviceToMonitor(String registrationNumber) throws IOException,NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
         registrationNumber = XGBCNetUtil.addZeroIfNeed(registrationNumber);
         String message = finalizeRequestMessage(Command.Y, CommandType.NONE, registrationNumber, registrationNumber);
@@ -241,16 +241,16 @@ public class XGBCNetClient {
     }
 
 
-    private ResponseEvaluator sendRequestFrame(String requestMessage) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    private ResponseEvaluator sendRequestFrame(String requestMessage) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
         if(!isPortOpen()){
-            throw new SerialPortIOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
+            throw new IOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
         }
 
         logger.log(Level.INFO, "Request       :" + requestMessage);
         int wrote = serialPort.writeBytes(requestMessage.getBytes(), requestMessage.length());
         if (wrote == -1) {
-            throw new SerialPortIOException("Error while sending request frame!");
+            throw new IOException("Error while sending request frame!");
         }
 
         ResponseEvaluator re= getResponse();
@@ -355,7 +355,7 @@ public class XGBCNetClient {
     }
 
 
-    public synchronized Tag readSingle(Tag tag) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Tag readSingle(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
         ResponseEvaluator re = sendRequestFrame(finalizeRequestMessage(Command.R, CommandType.SS, "01" + tag.formatToRequest(), null));
 
         String data = re.getResponse().getStructrizedDataArea();
@@ -365,7 +365,7 @@ public class XGBCNetClient {
 
     }
 
-    public synchronized Tag readSingleString(Tag tag, int countToRead) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Tag readSingleString(Tag tag, int countToRead) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
         if((tag.getDataType() != DataType.Word)){
             throw new IllegalArgumentException("The tag's data type must be a word when reading a string!");
         }
@@ -384,7 +384,7 @@ public class XGBCNetClient {
 
     }
 
-    public synchronized Response writeSingle(Tag tag) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Response writeSingle(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
 
 
@@ -409,7 +409,7 @@ public class XGBCNetClient {
 
     }
 
-    public synchronized Response writeDouble(Tag tag) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Response writeDouble(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
         /*
         ENQ
@@ -463,7 +463,7 @@ public class XGBCNetClient {
     }
 
 
-    public synchronized Response writeSingleString(Tag tag, String strData, int theLimitToWrite) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Response writeSingleString(Tag tag, String strData, int theLimitToWrite) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
         /*
     Sample write data
     ENQ
@@ -531,7 +531,7 @@ public class XGBCNetClient {
 
 
 
-    public synchronized Response writeBit(Tag tag,boolean flag) throws SerialPortIOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized Response writeBit(Tag tag,boolean flag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
         if(tag.getDataType()!=DataType.Bit){
             throw  new IllegalArgumentException("This tag type is not a Bit type!");

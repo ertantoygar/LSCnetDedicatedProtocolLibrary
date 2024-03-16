@@ -1,6 +1,5 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
 
-import com.fazecast.jSerialComm.SerialPortIOException;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -385,7 +384,7 @@ public class LSButton extends Button {
                     fireEvent(eventTagWrote);
 
 
-                } catch (SerialPortIOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
+                } catch (IOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
                          FrameCheckException e) {
                     e.printStackTrace();
                 }

@@ -1,6 +1,6 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
 
-import com.fazecast.jSerialComm.SerialPortIOException;
+
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -128,7 +128,7 @@ public class LSTextField extends TextField {
 
                 getTag().resumeUpdating();
 
-            } catch (SerialPortIOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
+            } catch (IOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
                      FrameCheckException ex) {
                 ex.printStackTrace();
             }
