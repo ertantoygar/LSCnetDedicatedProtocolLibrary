@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="First commit">
+    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="SerialPortIOException changed to IOException.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/XGBCNetUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/XGBCNetUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +25,16 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -40,11 +50,14 @@
     &quot;Maven.LSElectricCNETDedicatedProtocol [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LSElectricCNETDedicatedProtocol [compile].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LSElectricCNETDedicatedProtocol [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.LScnetProtocol [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LScnetProtocol [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.LScnetProtocol [deploy].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LScnetProtocol [package].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Storage/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/spreadingmachinecwithcnetprotocol&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -84,7 +97,17 @@
       <updated>1710490762368</updated>
       <workItem from="1710490763516" duration="13970000" />
       <workItem from="1710511133007" duration="4449000" />
-      <workItem from="1710579701868" duration="617000" />
+      <workItem from="1710579701868" duration="1536000" />
+      <workItem from="1710843453048" duration="3141000" />
+      <workItem from="1712666998173" duration="552000" />
+      <workItem from="1712670284560" duration="2765000" />
+      <workItem from="1712745877854" duration="1068000" />
+      <workItem from="1713081466822" duration="5277000" />
+      <workItem from="1713251076510" duration="2806000" />
+      <workItem from="1717513484136" duration="1345000" />
+      <workItem from="1720432465136" duration="6904000" />
+      <workItem from="1720685826088" duration="680000" />
+      <workItem from="1720776796125" duration="1962000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -94,14 +117,34 @@
       <option name="project" value="LOCAL" />
       <updated>1710509660252</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="SerialPortIOException changed to IOException.">
+      <option name="closed" value="true" />
+      <created>1710581480843</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710581480843</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First commit" />
+    <MESSAGE value="SerialPortIOException changed to IOException." />
+    <option name="LAST_COMMIT_MESSAGE" value="SerialPortIOException changed to IOException." />
   </component>
 </project>

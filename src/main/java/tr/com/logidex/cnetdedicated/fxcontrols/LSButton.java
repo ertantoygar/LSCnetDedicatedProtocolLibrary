@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class LSButton extends Button {
 
-    private boolean touchFunctions = false;
+    private SimpleBooleanProperty touchFunctions = new SimpleBooleanProperty(true);
     Border border = new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT));
     Background greenBackGround = new Background(new BackgroundFill(Color.PALEGREEN, new CornerRadii(10), javafx.geometry.Insets.EMPTY));
     Background normalBackGround = new Background(new BackgroundFill(Color.rgb(192, 205, 220), new CornerRadii(10), javafx.geometry.Insets.EMPTY));
@@ -324,22 +324,15 @@ public class LSButton extends Button {
     }
 
 
-    public void setTouchFunctions(boolean touchFunctions) {
-        this.touchFunctions = touchFunctions;
-    }
-
-    public boolean isTouchFunctions() {
-        return touchFunctions;
-    }
-
-
-
 
     public LSButton() {
 
 
+        touchFunctions.bind(XGBCNetClient.touchScreen);
 
-        if (touchFunctions) {
+
+
+        if (touchFunctions.get()) {
 
             setOnTouchPressed(e -> {
                 pressed();
@@ -409,7 +402,7 @@ public class LSButton extends Button {
                 Platform.runLater(() -> {
                     String bitPos = usesAnotherFeedBackAddress.get() ? fBackBitPositionInTheWord : writeBitPositionInTheWord;
 
-                    readBitStatus.set(XGBCNetUtil.checkBit(newValue, Integer.parseInt(bitPos, 16)));
+                    readBitStatus.set(XGBCNetUtil.checkBit16(newValue, Integer.parseInt(bitPos, 16)));
 
                     //  xxx(getText() + "  = " + status);
                     if (readBitStatus.get()) {

@@ -1,6 +1,7 @@
 package tr.com.logidex.cnetdedicated.app;
 
 import com.fazecast.jSerialComm.SerialPort;
+import javafx.beans.property.SimpleBooleanProperty;
 import tr.com.logidex.cnetdedicated.device.DataBlock;
 import tr.com.logidex.cnetdedicated.device.DataType;
 import tr.com.logidex.cnetdedicated.device.Tag;
@@ -34,14 +35,24 @@ public class XGBCNetClient {
     private int stationNumber;
     private String strStationNumber;
 
+    private Level logLevel = Level.SEVERE;
+
+    public static SimpleBooleanProperty touchScreen = new SimpleBooleanProperty(true);
+
 
     private Map<Integer, List<Tag>> regNumbersAndDevices = new TreeMap<Integer, List<Tag>>();
+    /**
+     * Represents the delay (in milliseconds) to wait for a response in the XGBCNetClient class.
+     */
+    private long responseWaitTime = 60;
 
 
     private XGBCNetClient() {
 
-        logger.setLevel(Level.SEVERE);
+        logger.setLevel(logLevel);
     }
+
+
 
 
     public static XGBCNetClient getInstance() {
@@ -100,6 +111,36 @@ public class XGBCNetClient {
         serialPort.setNumStopBits(newNumStopBits);
     }
 
+
+    public static void setTouchScreen(boolean touchScreen) {
+        XGBCNetClient.touchScreen.set(touchScreen);
+    }
+
+    public void setLogLevel(Level logLevel) {
+        this.logLevel = logLevel;
+        logger.setLevel(logLevel);
+    }
+
+
+    /**
+     *
+     * Sets the response wait time.
+     *
+     * @param responseWaitTime The amount of time to wait for a response.
+     */
+    public void setResponseWaitTime(long responseWaitTime) {
+        this.responseWaitTime = responseWaitTime;
+    }
+
+    /**
+     * Retrieves the response wait time.
+     *
+     * @return The amount of time to wait for a response.
+     */
+    public long getResponseWaitTime() {
+        return responseWaitTime;
+    }
+
     public boolean connect(ConnectionParams connectionParams) {
 
         serialPort = SerialPort.getCommPort(connectionParams.getPortName());
@@ -124,7 +165,7 @@ public class XGBCNetClient {
         return serialPort.isOpen();
     }
 
-    private void closePort(){
+    public void closePort(){
         if(serialPort.isOpen()){
             serialPort.closePort();
         }
@@ -275,7 +316,7 @@ public class XGBCNetClient {
         //  300 byte veri icin yani 16 adet LWord 19200 hiz ile 200 ms beklemek gerekir.
 
         try {
-            Thread.sleep(40);
+            Thread.sleep(responseWaitTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

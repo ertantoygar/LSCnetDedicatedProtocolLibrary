@@ -367,6 +367,10 @@ public class LSTextField extends TextField {
 
     public void update() {
 
+        if(tag == null){
+            return;
+        }
+
         Platform.runLater(() -> {
 
             if (behaveLikeAfloat.get()) {
@@ -381,6 +385,8 @@ public class LSTextField extends TextField {
                 this.setText(tag.getValue());
             }
         });
+
+
 
     }
 

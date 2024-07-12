@@ -84,7 +84,7 @@ public class XGBCNetUtil {
     }
 
 
-    public static boolean checkBit(String binaryString, int bitIndex) {
+    public static boolean checkBit16(String binaryString, int bitIndex) {
         // 16 bit kontrolü
         if (binaryString.length() != 16) {
             throw new IllegalArgumentException("Binary string must be 16 bits long.");
@@ -100,6 +100,18 @@ public class XGBCNetUtil {
         // İstenilen bitin değerini kontrol etme
         char bitChar = reversedString.charAt(bitIndex);
         return bitChar == '1';
+    }
+
+    public static boolean checkBit32(String binaryString, int bitIndex) {
+        if (binaryString.length() != 32) {
+            throw new IllegalArgumentException("Binary string must be 32 bits long.");
+        } else if (bitIndex >= 0 && bitIndex < 32) {
+            String reversedString = (new StringBuilder(binaryString)).reverse().toString();
+            char bitChar = reversedString.charAt(bitIndex);
+            return bitChar == '1';
+        } else {
+            throw new IllegalArgumentException("Bit index must be between 0 and 31 (inclusive).");
+        }
     }
 
 
