@@ -1,10 +1,5 @@
 package tr.com.logidex.cnetdedicated.protocol;
-
-
-
 public class ConnectionParams {
-
-
     private String portName;
     private int baudRate;
     private Parity parity = Parity.none;
@@ -12,38 +7,42 @@ public class ConnectionParams {
     private int stopBits = 1;
     private int stationNumber = 2;
 
-    public ConnectionParams(String portName, int baudRate, Parity parity, int dataBits,int
-                                 stopBits,int stationNumber) {
 
-        this.portName=portName;
-        this.baudRate=baudRate;
-        this.parity=parity;
-        this.dataBits=dataBits;
-        this.stopBits=stopBits;
-        this.stationNumber=stationNumber;
-
-
+    public ConnectionParams(String portName, int baudRate, Parity parity, int dataBits, int
+            stopBits, int stationNumber) {
+        this.portName = portName;
+        this.baudRate = baudRate;
+        this.parity = parity;
+        this.dataBits = dataBits;
+        this.stopBits = stopBits;
+        this.stationNumber = stationNumber;
     }
+
 
     public String getPortName() {
         return portName;
     }
 
+
     public int getBaudRate() {
         return baudRate;
     }
+
 
     public Parity getParity() {
         return parity;
     }
 
+
     public int getDataBits() {
         return dataBits;
     }
 
+
     public int getStopBits() {
         return stopBits;
     }
+
 
     public int getStationNumber() {
         return stationNumber;
@@ -52,6 +51,6 @@ public class ConnectionParams {
 
     @Override
     public String toString() {
-        return  " Port: "+portName + ", " + " Baudrate: " +baudRate + ", " + " Parity: " + parity + ", " +" Databits: "+ dataBits+ ", " + " Stopbits: "+stopBits + ", " + " Station number: "+ stationNumber;
+        return " Port: " + portName + ", " + " Baudrate: " + baudRate + ", " + " Parity: " + parity + ", " + " Databits: " + dataBits + ", " + " Stopbits: " + stopBits + ", " + " Station number: " + stationNumber;
     }
 }

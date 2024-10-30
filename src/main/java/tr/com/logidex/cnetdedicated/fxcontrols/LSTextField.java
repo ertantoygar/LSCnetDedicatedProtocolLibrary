@@ -1,6 +1,4 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
-
-
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -26,28 +24,16 @@ import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
 
 import java.io.IOException;
 
-
 public class LSTextField extends TextField {
-
-
+    private static final int MIN_INPUT_LIMIT = 8;
+    Background defaultBackground = new Background(new BackgroundFill(Color.rgb(158, 184, 217), new CornerRadii(5), Insets.EMPTY));
+    Background focusedBackground = new Background(new BackgroundFill(Color.rgb(224, 159, 143), new CornerRadii(5), Insets.EMPTY));
+    boolean firstChangeLog;
     private boolean logging;
     private long savedLastLogTime;
-
-    public enum DataLen {
-        Bit,
-        Byte,
-        Word,
-        Dword,
-        Lword;
-    }
-
-
     private Tag tag;
-    private static final int MIN_INPUT_LIMIT = 8;
     private ValidationSupport validationSupport = new ValidationSupport();
-
     private String lastValue = "";
-
     private ObjectProperty<Device> device = new SimpleObjectProperty<Device>();
     private ObjectProperty<DataLen> dataType = new SimpleObjectProperty<DataLen>();
     private StringProperty tagAddress = new SimpleStringProperty();
@@ -56,50 +42,29 @@ public class LSTextField extends TextField {
     private IntegerProperty inputCharLimit = new SimpleIntegerProperty(MIN_INPUT_LIMIT);
     private IntegerProperty minValue = new SimpleIntegerProperty(Integer.MIN_VALUE);
     private IntegerProperty maxValue = new SimpleIntegerProperty(Integer.MAX_VALUE);
-
     /**
      * The eventTagWrote variable represents an instance of the TagWroteEvent class,
      * which is an event that is fired when a tag is written.
      */
     private TagWroteEvent eventTagWrote = new TagWroteEvent();
-
     private BooleanProperty behaveLikeAfloat = new SimpleBooleanProperty();
 
-    Background defaultBackground = new Background(new BackgroundFill(Color.rgb(158, 184, 217), new CornerRadii(5), Insets.EMPTY));
-    Background focusedBackground = new Background(new BackgroundFill(Color.rgb(224, 159, 143), new CornerRadii(5), Insets.EMPTY));
-
-    boolean firstChangeLog;
 
     public LSTextField() {
-
         setFocusTraversable(false);
-
         update();
-
-
         textProperty().addListener((observable, oldValue, newValue) -> {
-
             if (newValue.length() > inputCharLimit.get()) {
                 setText(oldValue);
             }
-
         });
-
         setOnMouseClicked(e -> {
-
             tag.pauseUpdating();
             saveLastValue();
             selectAll();
-
-
         });
-
-
         setOnAction(e -> {
-
             System.out.println(e.getSource());
-
-
             if (!valid() && !behaveLikeAfloat.get()) {
                 setText(getLastValue());
                 getTag().resumeUpdating();
@@ -109,8 +74,6 @@ public class LSTextField extends TextField {
                 e.consume();
                 return;
             }
-
-
             setByItsDataType();
             try {
                 if (getDisplayFormat().equals(DisplayFormat.STRING)) {
@@ -122,64 +85,42 @@ public class LSTextField extends TextField {
                         XGBCNetClient.getInstance().writeDouble(getTag());
                     }
                 }
-                if(getScene() !=null) { // fire metodu ile deger degistiginde getscene nul donuyor
+                if (getScene() != null) { // fire metodu ile deger degistiginde getscene nul donuyor
                     getScene().getRoot().requestFocus();
                 }
-
                 getTag().resumeUpdating();
-
             } catch (IOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
                      FrameCheckException ex) {
                 ex.printStackTrace();
             }
-
-
         });
-
-
         setBackground(defaultBackground);
         setStyle("-fx-border-color: #9f9c9c;-fx-border-radius: 5px");
-
-
         focusedProperty().addListener(new ChangeListener<Boolean>() {
-
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 NumPad numPad = NumPad.getInstance();
-
                 if (newValue) {
                     setBackground(focusedBackground);
                     tag.pauseUpdating();
-
                     if (displayFormat.get() == DisplayFormat.STRING) {
-
-
                         try {
                             Runtime.getRuntime().exec("cmd /c start osk");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                     } else {
-
                         numPad.setMinMax(minValue.get(), maxValue.get());
                         numPad.setVisible(true);
                     }
-
-
                 } else {
                     fireEvent(new ActionEvent());
                     setBackground(defaultBackground);
                     tag.resumeUpdating();
                     numPad.setVisible(false);
-
-
                 }
-
             }
         });
-
-
     }
 
 
@@ -187,70 +128,74 @@ public class LSTextField extends TextField {
         return device.get();
     }
 
-    public ObjectProperty<Device> deviceProperty() {
-        return device;
-    }
 
     public void setDevice(Device device) {
         this.device.set(device);
     }
 
+
+    public ObjectProperty<Device> deviceProperty() {
+        return device;
+    }
+
+
     public DataLen getDataType() {
         return dataType.get();
     }
 
-    public ObjectProperty<DataLen> dataTypeProperty() {
-        return dataType;
-    }
 
     public void setDataType(DataLen dataType) {
         this.dataType.set(dataType);
     }
 
+
+    public ObjectProperty<DataLen> dataTypeProperty() {
+        return dataType;
+    }
+
+
     public String getTagAddress() {
         return tagAddress.get();
     }
 
-    public StringProperty tagAddressProperty() {
-        return tagAddress;
-    }
 
     public void setTagAddress(String tagAddress) {
-
         // property uzerinden verilen adresler word adresleridir. 32 bit okuma yapilacaksa
         // double adresine erismek icin verilen adresin yarisi alinmalidir.
         if (getDataTypeForDataLen(getDataType()) == DataType.Dword) {
             int newAddress = Integer.parseInt(tagAddress) / 2;
             tagAddress = String.valueOf(newAddress);
         }
-
-
         this.tagAddress.set(tagAddress);
         int tagMultiplier = isBehaveLikeAfloat() ? 1 : multiplier.getValue();
         tag = new Tag(getDevice(), getDataTypeForDataLen(getDataType()), getTagAddress(), getDisplayFormat(), tagMultiplier);
-
         tag.valueProperty().addListener((observable, oldValue, newValue) -> update());
         Tooltip tt = new Tooltip();
         tt.setText(tag.toString() + ":" + getDisplayFormat());
         setTooltip(tt);
-
         if (!isDisable()) {
             addValidator();
         }
-
-
     }
+
+
+    public StringProperty tagAddressProperty() {
+        return tagAddress;
+    }
+
 
     public DisplayFormat getDisplayFormat() {
         return displayFormat.get();
     }
 
-    public ObjectProperty<DisplayFormat> displayFormatProperty() {
-        return displayFormat;
-    }
 
     public void setDisplayFormat(DisplayFormat displayFormat) {
         this.displayFormat.set(displayFormat);
+    }
+
+
+    public ObjectProperty<DisplayFormat> displayFormatProperty() {
+        return displayFormat;
     }
 
 
@@ -258,12 +203,14 @@ public class LSTextField extends TextField {
         return behaveLikeAfloat.get();
     }
 
-    public BooleanProperty behaveLikeAfloatProperty() {
-        return behaveLikeAfloat;
-    }
 
     public void setBehaveLikeAfloat(boolean behaveLikeAfloat) {
         this.behaveLikeAfloat.set(behaveLikeAfloat);
+    }
+
+
+    public BooleanProperty behaveLikeAfloatProperty() {
+        return behaveLikeAfloat;
     }
 
 
@@ -271,13 +218,10 @@ public class LSTextField extends TextField {
         return eventTagWrote;
     }
 
+
     private void addValidator() {
-
         validationSupport.setValidationDecorator(null);
-
-
         validationSupport.setErrorDecorationEnabled(false);
-
         if (tag.isNumericTag()) {
             validationSupport.registerValidator(this, (control, value) -> {
                 try {
@@ -292,8 +236,8 @@ public class LSTextField extends TextField {
                 return null;
             });
         }
-
     }
+
 
     public boolean valid() {
         getValidationSupport().setErrorDecorationEnabled(true);
@@ -306,27 +250,33 @@ public class LSTextField extends TextField {
         return multiplier.get();
     }
 
-    public IntegerProperty multiplierProperty() {
-        return multiplier;
-    }
 
     public void setMultiplier(int multiplier) {
         this.multiplier.set(multiplier);
     }
 
+
+    public IntegerProperty multiplierProperty() {
+        return multiplier;
+    }
+
+
     public int getInputCharLimit() {
         return inputCharLimit.get();
     }
 
-    public IntegerProperty inputCharLimitProperty() {
-        return inputCharLimit;
-    }
 
     public void setInputCharLimit(int inputCharLimit) {
         if (inputCharLimit < MIN_INPUT_LIMIT)
             return;
         this.inputCharLimit.set(inputCharLimit);
     }
+
+
+    public IntegerProperty inputCharLimitProperty() {
+        return inputCharLimit;
+    }
+
 
     public String getLastValue() {
         return lastValue;
@@ -337,57 +287,55 @@ public class LSTextField extends TextField {
         return minValue.get();
     }
 
-    public IntegerProperty minValueProperty() {
-        return minValue;
-    }
 
     public void setMinValue(int minValue) {
         this.minValue.set(minValue);
     }
 
+
+    public IntegerProperty minValueProperty() {
+        return minValue;
+    }
+
+
     public int getMaxValue() {
         return maxValue.get();
     }
 
-    public IntegerProperty maxValueProperty() {
-        return maxValue;
-    }
 
     public void setMaxValue(int maxValue) {
         this.maxValue.set(maxValue);
     }
 
+
+    public IntegerProperty maxValueProperty() {
+        return maxValue;
+    }
+
+
     public Tag getTag() {
         return tag;
     }
+
 
     public ValidationSupport getValidationSupport() {
         return validationSupport;
     }
 
-    public void update() {
 
-        if(tag == null){
+    public void update() {
+        if (tag == null) {
             return;
         }
-
         Platform.runLater(() -> {
-
             if (behaveLikeAfloat.get()) {
-
                 String s = tag.getValue();
-
-
                 float f = Float.parseFloat(s) / (float) multiplier.get();
                 this.setText(Float.toString(f));
             } else {
-
                 this.setText(tag.getValue());
             }
         });
-
-
-
     }
 
 
@@ -405,7 +353,6 @@ public class LSTextField extends TextField {
                 return DataType.Lword;
             default:
                 throw new IllegalArgumentException("Invalid DataLen: " + dataLen);
-
         }
     }
 
@@ -416,16 +363,13 @@ public class LSTextField extends TextField {
 
 
     public void setByItsDataType() {
-
         Tag tag = getTag();
-
         if (behaveLikeAfloat.get()) {
             float f = Float.parseFloat(getText());
             short s = (short) (f * (float) multiplier.get());
             tag.setValueAsHexString(getTag().toHexString(s));
             return;
         }
-
         switch (tag.getDataType()) {
             case Word:
                 if (getDisplayFormat().equals(DisplayFormat.STRING)) {
@@ -439,28 +383,21 @@ public class LSTextField extends TextField {
                     tag.setValueAsHexString(getTag().toHexString(Float.valueOf(getText())));
                 } else {
                     tag.setValueAsHexString(getTag().toHexString(Integer.valueOf(getText())));
-
                 }
                 break;
-
-
-
         }
-
-        if ((System.currentTimeMillis() - savedLastLogTime) > 1000 ){
-
-                fireEvent(eventTagWrote);
-                savedLastLogTime = System.currentTimeMillis();
-
-
+        if ((System.currentTimeMillis() - savedLastLogTime) > 1000) {
+            fireEvent(eventTagWrote);
+            savedLastLogTime = System.currentTimeMillis();
         }
-
-
-
-
     }
 
 
-
-
+    public enum DataLen {
+        Bit,
+        Byte,
+        Word,
+        Dword,
+        Lword;
+    }
 }

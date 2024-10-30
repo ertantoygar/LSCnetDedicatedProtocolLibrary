@@ -1,5 +1,4 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
-
 import javafx.event.Event;
 import javafx.event.EventType;
 
@@ -8,22 +7,21 @@ import javafx.event.EventType;
  * It extends the Event class.
  */
 public class TagWroteEvent extends Event {
-
     public static final EventType<TagWroteEvent> et = new EventType<>(Event.ANY, "Button tag write event");
     private String data;
 
 
     public TagWroteEvent() {
         super(et);
+    }
 
+
+    public String getData() {
+        return data;
     }
 
 
     public void setData(String s) {
         data = s;
-    }
-
-    public String getData() {
-        return data;
     }
 }

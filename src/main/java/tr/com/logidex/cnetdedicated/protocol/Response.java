@@ -1,13 +1,9 @@
 package tr.com.logidex.cnetdedicated.protocol;
-
 import java.util.Arrays;
 
 public abstract class Response {
-
     public static final char ETX = (char) 0x03;
-
     public static final char ACK = (char) 0x06;
-
     public static final char NAK = (char) 0x15;
     private char[] stationNumber = new char[2];
     private Command command;
@@ -19,6 +15,12 @@ public abstract class Response {
         this.stationNumber = stationNumber;
     }
 
+
+    public Command getCommand() {
+        return command;
+    }
+
+
     public void setCommand(char commandChar) {
         char commandUpperCase = Character.toUpperCase(commandChar);
         for (Command c : Command.values()) {
@@ -29,26 +31,25 @@ public abstract class Response {
         }
     }
 
-    public Command getCommand() {
-        return command;
+
+    public CommandType getCommandType() {
+        return commandType;
     }
 
-    public void setCommandType(char[] commandType) {
 
+    public void setCommandType(char[] commandType) {
         String strCommandType = new String(commandType);
         for (CommandType ct : CommandType.values()) {
             if (ct.name().equals(strCommandType)) {
                 this.commandType = ct;
                 break;
             }
-
-
         }
-
     }
 
-    public CommandType getCommandType() {
-        return commandType;
+
+    public String getStructrizedDataArea() {
+        return structrizedDataArea;
     }
 
 
@@ -57,14 +58,10 @@ public abstract class Response {
     }
 
 
-    public String getStructrizedDataArea() {
-        return structrizedDataArea;
-    }
-
     @Override
     public String toString() {
         return "Response{" +
-                getClass().getSimpleName()+ ", " +
+                getClass().getSimpleName() + ", " +
                 "stationNumber=" + Arrays.toString(stationNumber) +
                 ", command=" + command +
                 ", commandType=" + commandType +

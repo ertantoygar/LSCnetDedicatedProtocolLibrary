@@ -1,6 +1,4 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
-
-
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -8,13 +6,12 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-
 /**
- * @author ertan
+ * The NumPad class represents a custom numeric keypad interface within a JFrame.
+ * This class provides singleton access and allows you to set minimum and maximum values for input.
+ * It extends javax.swing.JFrame and integrates with Java's AWT Robot class for automation tasks.
  */
-
 public class NumPad extends JFrame {
-
     /**
      *
      */
@@ -24,6 +21,7 @@ public class NumPad extends JFrame {
     JLabel lblNewLabel = new JLabel("");
     private Point initialClick;
     private Robot robot;
+
 
     /**
      * Create the frame.
@@ -54,12 +52,10 @@ public class NumPad extends JFrame {
         contentPane.add(panel, BorderLayout.CENTER);
         JButton btn7 = new JButton("7");
         btn7.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_7);
             }
-
         });
         btn7.setForeground(new Color(255, 255, 255));
         btn7.setBackground(new Color(45, 55, 65));
@@ -67,12 +63,10 @@ public class NumPad extends JFrame {
         btn7.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn8 = new JButton("8");
         btn8.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_8);
             }
-
         });
         btn8.setForeground(new Color(255, 255, 255));
         btn8.setBackground(new Color(45, 55, 65));
@@ -80,12 +74,10 @@ public class NumPad extends JFrame {
         btn8.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn9 = new JButton("9");
         btn9.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_9);
             }
-
         });
         btn9.setForeground(new Color(255, 255, 255));
         btn9.setBackground(new Color(45, 55, 65));
@@ -93,12 +85,10 @@ public class NumPad extends JFrame {
         btn9.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn4 = new JButton("4");
         btn4.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_4);
             }
-
         });
         btn4.setForeground(new Color(255, 255, 255));
         btn4.setBackground(new Color(45, 55, 65));
@@ -106,12 +96,10 @@ public class NumPad extends JFrame {
         btn4.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn5 = new JButton("5");
         btn5.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_5);
             }
-
         });
         btn5.setForeground(new Color(255, 255, 255));
         btn5.setBackground(new Color(45, 55, 65));
@@ -119,12 +107,10 @@ public class NumPad extends JFrame {
         btn5.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn6 = new JButton("6");
         btn6.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_6);
             }
-
         });
         btn6.setForeground(new Color(255, 255, 255));
         btn6.setBackground(new Color(45, 55, 65));
@@ -132,12 +118,10 @@ public class NumPad extends JFrame {
         btn6.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn1 = new JButton("1");
         btn1.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_1);
             }
-
         });
         btn1.setForeground(new Color(255, 255, 255));
         btn1.setBackground(new Color(45, 55, 65));
@@ -145,12 +129,10 @@ public class NumPad extends JFrame {
         btn1.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn2 = new JButton("2");
         btn2.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_2);
             }
-
         });
         btn2.setForeground(new Color(255, 255, 255));
         btn2.setBackground(new Color(45, 55, 65));
@@ -158,31 +140,25 @@ public class NumPad extends JFrame {
         btn2.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn3 = new JButton("3");
         btn3.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_3);
             }
-
         });
         btn3.setForeground(new Color(255, 255, 255));
         btn3.setBackground(new Color(45, 55, 65));
         btn3.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
             }
-
         });
         btn3.setPreferredSize(new Dimension(25, 25));
         btn3.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btn0 = new JButton("0");
         btn0.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_0);
             }
-
         });
         btn0.setForeground(new Color(255, 255, 255));
         btn0.setBackground(new Color(45, 55, 65));
@@ -190,12 +166,10 @@ public class NumPad extends JFrame {
         btn0.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btnNeg = new JButton("-");
         btnNeg.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_MINUS);
             }
-
         });
         btnNeg.setForeground(new Color(255, 255, 255));
         btnNeg.setBackground(new Color(45, 55, 65));
@@ -203,12 +177,10 @@ public class NumPad extends JFrame {
         btnNeg.setFont(new Font("Tahoma", Font.BOLD, 25));
         JButton btnDot = new JButton(".");
         btnDot.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(0x2e);
             }
-
         });
         btnDot.setForeground(new Color(255, 255, 255));
         btnDot.setBackground(new Color(45, 55, 65));
@@ -216,14 +188,11 @@ public class NumPad extends JFrame {
         btnDot.setFont(new Font("Tahoma", Font.BOLD, 25));
         btnDot.setVisible(true);
         JButton btnBack = new JButton("Back");
-
         btnBack.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_BACK_SPACE);
             }
-
         });
         btnBack.setForeground(new Color(255, 255, 255));
         btnBack.setBackground(new Color(45, 55, 65));
@@ -231,13 +200,11 @@ public class NumPad extends JFrame {
         btnBack.setFont(new Font("Tahoma", Font.BOLD, 14));
         JButton btnEnter = new JButton("Enter");
         btnEnter.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_ENTER);
                 NumPad.this.setVisible(false);
             }
-
         });
         btnEnter.setForeground(new Color(255, 255, 255));
         btnEnter.setBackground(new Color(45, 55, 65));
@@ -245,12 +212,10 @@ public class NumPad extends JFrame {
         btnEnter.setFont(new Font("Tahoma", Font.BOLD, 14));
         JButton btnPrev = new JButton("<");
         btnPrev.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_LEFT);
             }
-
         });
         btnPrev.setForeground(new Color(255, 255, 255));
         btnPrev.setBackground(new Color(45, 55, 65));
@@ -258,12 +223,10 @@ public class NumPad extends JFrame {
         btnPrev.setFont(new Font("Tahoma", Font.BOLD, 14));
         JButton btnNext = new JButton(">");
         btnNext.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 robot.keyPress(KeyEvent.VK_RIGHT);
             }
-
         });
         btnNext.setForeground(new Color(255, 255, 255));
         btnNext.setBackground(new Color(45, 55, 65));
@@ -274,11 +237,9 @@ public class NumPad extends JFrame {
         btnCancel.setForeground(new Color(255, 255, 255));
         btnCancel.setBackground(new Color(45, 55, 65));
         btnCancel.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 NumPad.this.setVisible(false);
             }
-
         });
         btnCancel.setPreferredSize(new Dimension(25, 25));
         btnCancel.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -326,16 +287,13 @@ public class NumPad extends JFrame {
                 .addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel).addGap(9)));
         panel.setLayout(gl_panel);
         NumPad.this.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
                 getComponentAt(initialClick);
             }
-
         });
         NumPad.this.addMouseMotionListener(new MouseMotionAdapter() {
-
             @Override
             public void mouseDragged(MouseEvent e) {
                 // get location of Window
@@ -349,7 +307,6 @@ public class NumPad extends JFrame {
                 int Y = thisY + yMoved;
                 NumPad.this.setLocation(X, Y);
             }
-
         });
     }
 
@@ -365,5 +322,4 @@ public class NumPad extends JFrame {
     public void setMinMax(float minValue, float maxValue) {
         lblNewLabel.setText("Min:" + minValue + "  Max:" + maxValue);
     }
-
 }
