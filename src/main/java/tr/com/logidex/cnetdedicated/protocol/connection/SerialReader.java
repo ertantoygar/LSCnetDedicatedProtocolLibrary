@@ -1,25 +1,14 @@
-package tr.com.logidex.cnetdedicated.protocol;
+package tr.com.logidex.cnetdedicated.protocol.connection;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
-
-import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class SerialReader {
+public class SerialReader implements ResponseReader {
 
     public interface SerialReaderObserver {
         void onDataReceived(String data, String requestId);

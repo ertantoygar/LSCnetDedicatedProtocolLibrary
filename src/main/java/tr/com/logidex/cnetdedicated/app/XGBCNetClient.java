@@ -7,6 +7,10 @@ import tr.com.logidex.cnetdedicated.device.DataType;
 import tr.com.logidex.cnetdedicated.device.RegisteredDataBlock;
 import tr.com.logidex.cnetdedicated.device.Tag;
 import tr.com.logidex.cnetdedicated.protocol.*;
+import tr.com.logidex.cnetdedicated.protocol.connection.Connection;
+import tr.com.logidex.cnetdedicated.protocol.connection.ConnectionFactory;
+import tr.com.logidex.cnetdedicated.protocol.connection.ConnectionParams;
+import tr.com.logidex.cnetdedicated.protocol.connection.SerialReader;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.FrameCheckException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoAcknowledgeMessageFromThePLCException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
@@ -32,7 +36,6 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
     private static final boolean USE_FRAME_CHECK = true;
 
-    private SerialPort serialPort;
     private int stationNumber;
     private String strStationNumber;
 
@@ -48,7 +51,8 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
      * Represents the delay (in milliseconds) to wait for a response in the XGBCNetClient class.
      */
 
-    private SerialReader serialReader;
+
+    private Connection connection;
 
 
     private XGBCNetClient() {
@@ -69,49 +73,9 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
         return instance;
     }
 
-    private int parityValueOf(Parity parity) {
-
-        int intParity = 0;
 
 
-        switch (parity) {
-            case odd:
-                intParity = SerialPort.ODD_PARITY;
-                break;
-            case even:
-                intParity = SerialPort.EVEN_PARITY;
-                break;
-            case none:
-                intParity = SerialPort.NO_PARITY;
-                break;
-            case mark:
-                intParity = SerialPort.MARK_PARITY;
-                break;
-            case space:
-                intParity = SerialPort.SPACE_PARITY;
-                break;
-            default:
-                break;
-        }
 
-        return intParity;
-    }
-
-    public void setBaudRate(int newBaudRate) {
-        serialPort.setBaudRate(newBaudRate);
-    }
-
-    public void setParity(Parity parity) {
-        serialPort.setParity(parityValueOf(parity));
-    }
-
-    public void setNumDataBits(int newNumDataBits) {
-        serialPort.setNumDataBits(newNumDataBits);
-    }
-
-    public void setNumStopBits(int newNumStopBits) {
-        serialPort.setNumStopBits(newNumStopBits);
-    }
 
 
     public static void setTouchScreen(boolean touchScreen) {
@@ -126,33 +90,27 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
     public boolean connect(ConnectionParams connectionParams) {
 
-        serialPort = SerialPort.getCommPort(connectionParams.getPortName());
-        serialPort.setBaudRate(connectionParams.getBaudRate());
-        serialPort.setParity(parityValueOf(connectionParams.getParity()));
-        serialPort.setNumDataBits(connectionParams.getDataBits());
-        serialPort.setNumStopBits(connectionParams.getStopBits());
+         connection = ConnectionFactory.createConnection(connectionParams);
+
         this.stationNumber = connectionParams.getStationNumber();
         strStationNumber = this.stationNumber < 10 ? "0" + stationNumber : String.valueOf(stationNumber);
-
-        boolean result = serialPort.openPort();
-
-        serialReader = new SerialReader(serialPort, this);
+        boolean result = connection.connect();
 
         return result;
     }
 
-    public boolean isPortOpen() {
+    public boolean isConnected() {
 
-        if (serialPort == null) {
+        if (connection == null) {
             return false;
         }
 
-        return serialPort.isOpen();
+        return connection.isConnected();
     }
 
-    public void closePort() {
-        if (serialPort.isOpen()) {
-            serialPort.closePort();
+    public void disconnect() {
+        if (isConnected()) {
+            connection.disconnect();
         }
     }
 
@@ -268,24 +226,28 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
     private ResponseEvaluator sendRequestFrame(String requestMessage) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
-        if (!isPortOpen()) {
+        if (!isConnected()) {
             throw new IOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
         }
 
         logger.log(Level.INFO, "Request       :" + requestMessage);
 
         String requestId = java.util.UUID.randomUUID().toString(); // Benzersiz bir istek kimliği oluştur
-                serialReader.sendRequest(requestMessage, requestId);
+                connection.sendRequest(requestMessage, requestId);
+
+
 
         // Cevabı beklemek için
         long t = System.currentTimeMillis();
-        while (serialReader.getResponse(requestId) == null) {
+        while (connection.getResponseReader().getResponse(requestId) == null) {
             if (System.currentTimeMillis() - t > 3000) {
                 throw new NoResponseException();
             }
         }
 
-        String response = serialReader.getResponse(requestId);
+
+
+        String response = connection.getResponseReader().getResponse(requestId);
         logger.log(Level.INFO, "Response for request " + requestId + ": " + response);
 
 
@@ -561,7 +523,7 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
     @Override
     public void onDataReceived(String data, String requestId) {
-        serialReader.setResponse(requestId, data);
+        connection.getResponseReader().setResponse(requestId, data);
     }
 }
 
