@@ -115,14 +115,34 @@ public class XGBCNetUtil {
     }
 
 
-
-
     public static String multiplyAddress(String s, int i) {
 
-        String prefix = s.substring(0,5);
-        String addr = s.substring(5);
-        int newAddr = Integer.parseInt(addr) * i;
-        return prefix+String.valueOf(newAddr);
+        String prefix = s.substring(0, 5);
+        String originalAddress = s.substring(5);
+
+
+        int newAddr = Integer.parseInt(originalAddress) * i;
+
+
+        //The msg len might increase when multiplied with any number,so we must recalculate its length.
+        // how many digits does the old number have?
+        int digitCountOld = String.valueOf(Integer.parseInt(originalAddress)).length();
+
+        // how many digits does the new number have?
+        int digitCount = String.valueOf(newAddr).length();
+
+        int addToPrefix = digitCount - digitCountOld;
+
+        int len = Integer.parseInt(prefix.substring(0, 2));
+
+        // increase the prefix much as addToPrefix
+        String newLen = addZeroIfNeed(len + addToPrefix);
+
+        prefix = newLen + prefix.substring(2, 5);
+///////////////////////////////////////////////////////////
+
+
+        return prefix + String.valueOf(newAddr);
     }
 
     public static String swap(String str) {

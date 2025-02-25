@@ -4,21 +4,22 @@ import com.fazecast.jSerialComm.SerialPort;
 import javafx.beans.property.SimpleBooleanProperty;
 import tr.com.logidex.cnetdedicated.device.DataBlock;
 import tr.com.logidex.cnetdedicated.device.DataType;
+import tr.com.logidex.cnetdedicated.device.RegisteredDataBlock;
 import tr.com.logidex.cnetdedicated.device.Tag;
 import tr.com.logidex.cnetdedicated.protocol.*;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.FrameCheckException;
-import tr.com.logidex.cnetdedicated.util.XGBCNetUtil;
-import tr.com.logidex.cnetdedicated.device.RegisteredDataBlock;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoAcknowledgeMessageFromThePLCException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
+import tr.com.logidex.cnetdedicated.util.XGBCNetUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class XGBCNetClient {
+public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
 
     private static XGBCNetClient instance;
@@ -37,6 +38,8 @@ public class XGBCNetClient {
 
     private Level logLevel = Level.SEVERE;
 
+    private ConcurrentHashMap<String, String> requestResponseMap = new ConcurrentHashMap<>();
+
     public static SimpleBooleanProperty touchScreen = new SimpleBooleanProperty(true);
 
 
@@ -44,7 +47,8 @@ public class XGBCNetClient {
     /**
      * Represents the delay (in milliseconds) to wait for a response in the XGBCNetClient class.
      */
-    private long responseWaitTime = 60;
+
+    private SerialReader serialReader;
 
 
     private XGBCNetClient() {
@@ -53,14 +57,12 @@ public class XGBCNetClient {
     }
 
 
-
-
     public static XGBCNetClient getInstance() {
 
-        if (instance == null){
-           synchronized (XGBCNetClient.class){
-               instance=new XGBCNetClient();
-           }
+        if (instance == null) {
+            synchronized (XGBCNetClient.class) {
+                instance = new XGBCNetClient();
+            }
 
         }
 
@@ -122,25 +124,6 @@ public class XGBCNetClient {
     }
 
 
-    /**
-     *
-     * Sets the response wait time.
-     *
-     * @param responseWaitTime The amount of time to wait for a response.
-     */
-    public void setResponseWaitTime(long responseWaitTime) {
-        this.responseWaitTime = responseWaitTime;
-    }
-
-    /**
-     * Retrieves the response wait time.
-     *
-     * @return The amount of time to wait for a response.
-     */
-    public long getResponseWaitTime() {
-        return responseWaitTime;
-    }
-
     public boolean connect(ConnectionParams connectionParams) {
 
         serialPort = SerialPort.getCommPort(connectionParams.getPortName());
@@ -153,24 +136,25 @@ public class XGBCNetClient {
 
         boolean result = serialPort.openPort();
 
+        serialReader = new SerialReader(serialPort, this);
+
         return result;
     }
 
     public boolean isPortOpen() {
 
-        if(serialPort == null){
+        if (serialPort == null) {
             return false;
         }
 
         return serialPort.isOpen();
     }
 
-    public void closePort(){
-        if(serialPort.isOpen()){
+    public void closePort() {
+        if (serialPort.isOpen()) {
             serialPort.closePort();
         }
     }
-
 
 
     public synchronized void registerDevicesToMonitor(List<Tag> tags, String registrationNumber) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
@@ -193,7 +177,7 @@ public class XGBCNetClient {
         if (res.getResponse() instanceof AckResponse && res.getResponse().getCommand() == Command.X) {
             String regNo = res.getResponse().getStructrizedDataArea();
             // listemizin regNo indexine device adresleri yazmaliyiz.
-           // System.out.println(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
+            // System.out.println(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
 
             logger.info(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
             regNumbersAndDevices.put(Integer.parseInt(regNo), tags);
@@ -202,7 +186,7 @@ public class XGBCNetClient {
 
     }
 
-    public synchronized List<Tag> executeRegisteredDeviceToMonitor(String registrationNumber) throws IOException,NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+    public synchronized List<Tag> executeRegisteredDeviceToMonitor(String registrationNumber) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
         registrationNumber = XGBCNetUtil.addZeroIfNeed(registrationNumber);
         String message = finalizeRequestMessage(Command.Y, CommandType.NONE, registrationNumber, registrationNumber);
@@ -237,7 +221,7 @@ public class XGBCNetClient {
 
                         String value = rdb.getDataBlocks().get(i).getData();
 
-                        if(!entry.getValue().get(i).dontUpdateProperty().get()) {
+                        if (!entry.getValue().get(i).dontUpdateProperty().get()) {
 
                             entry.getValue().get(i).setValueAsHexString(value);
                         }
@@ -284,65 +268,40 @@ public class XGBCNetClient {
 
     private ResponseEvaluator sendRequestFrame(String requestMessage) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
-        if(!isPortOpen()){
+        if (!isPortOpen()) {
             throw new IOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
         }
 
         logger.log(Level.INFO, "Request       :" + requestMessage);
-        int wrote = serialPort.writeBytes(requestMessage.getBytes(), requestMessage.length());
-        if (wrote == -1) {
-            throw new IOException("Error while sending request frame!");
+
+        String requestId = java.util.UUID.randomUUID().toString(); // Benzersiz bir istek kimliği oluştur
+                serialReader.sendRequest(requestMessage, requestId);
+
+        // Cevabı beklemek için
+        long t = System.currentTimeMillis();
+        while (serialReader.getResponse(requestId) == null) {
+            if (System.currentTimeMillis() - t > 3000) {
+                throw new NoResponseException();
+            }
         }
 
-        ResponseEvaluator re= getResponse();
-
-        return re;
-
-
-    }
-
-    private ResponseEvaluator getResponse() throws NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-
-        //We will wait for response time or wait until we get the specified byte count.
-        // 9600 -> 130 ms
-        //19200 -> 80 ms
-        // 38400-> 50 ms
-        //57600 -> 40 ms
-        //76800 -> 38 ms
-        //115200 -> 34 ms (89 byte icin) , 30ms (15 byte)
-        int responseTime = serialPort.getBaudRate() >= 19200 ? 100 : 135;
-
-        // TODO burada veri miktarini da dikkate almak gerekir.
-        //  300 byte veri icin yani 16 adet LWord 19200 hiz ile 200 ms beklemek gerekir.
-
-        try {
-            Thread.sleep(responseWaitTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String response = serialReader.getResponse(requestId);
+        logger.log(Level.INFO, "Response for request " + requestId + ": " + response);
 
 
-        int availableBytes = serialPort.bytesAvailable();
-        byte[] buffer = new byte[serialPort.bytesAvailable()];
-        serialPort.readBytes(buffer, buffer.length);
-        String response = new String(buffer);
-        logger.log(Level.INFO, "Response(RAW) : " + response);
-
-
-        if(response.trim().isEmpty()){
+        if (response.trim().isEmpty()) {
             throw new NoResponseException();
         }
 
-        if(((char)response.getBytes()[0] != Response.ACK)){
+        if (((char) response.getBytes()[0] != Response.ACK)) {
             throw new NoAcknowledgeMessageFromThePLCException();
         }
 
         logger.info("The frame is checking...");
         boolean packageIsValid = XGBCNetUtil.checkFrame(response);
-        if(packageIsValid){
+        if (packageIsValid) {
             logger.info("Frame check OK!");
-        }
-        else{
+        } else {
             logger.severe("Frame check ERROR !!");
             throw new FrameCheckException();
         }
@@ -363,6 +322,8 @@ public class XGBCNetClient {
         }
 
         return null;
+
+
     }
 
 
@@ -407,20 +368,19 @@ public class XGBCNetClient {
     }
 
     public synchronized Tag readSingleString(Tag tag, int countToRead) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        if((tag.getDataType() != DataType.Word)){
+        if ((tag.getDataType() != DataType.Word)) {
             throw new IllegalArgumentException("The tag's data type must be a word when reading a string!");
         }
-        if(countToRead>64){
+        if (countToRead > 64) {
             throw new IllegalArgumentException("The parameter countToRead must not be greater than 64!");
         }
 
-        String charCount = XGBCNetUtil.addZeroIfNeed(String.format("%02x",countToRead / 2));
-        ResponseEvaluator re = sendRequestFrame(finalizeRequestMessage(Command.R, CommandType.SB, tag.formatToRequest()+ charCount, null));
+        String charCount = XGBCNetUtil.addZeroIfNeed(String.format("%02x", countToRead / 2));
+        ResponseEvaluator re = sendRequestFrame(finalizeRequestMessage(Command.R, CommandType.SB, tag.formatToRequest() + charCount, null));
 
         String data = re.getResponse().getStructrizedDataArea();
         tag.setValueAsHexString(data.substring(4));
         return tag;
-
 
 
     }
@@ -428,9 +388,8 @@ public class XGBCNetClient {
     public synchronized Response writeSingle(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
 
-
-        if(tag.getDataType()!=DataType.Word){
-            throw  new IllegalArgumentException("This tag type is not a Word type!");
+        if (tag.getDataType() != DataType.Word) {
+            throw new IllegalArgumentException("This tag type is not a Word type!");
         }
 
 
@@ -467,10 +426,8 @@ public class XGBCNetClient {
         */
 
 
-
-
-        if(tag.getDataType()!=DataType.Dword){
-            throw  new IllegalArgumentException("This tag type is not a DoubleWord type!");
+        if (tag.getDataType() != DataType.Dword) {
+            throw new IllegalArgumentException("This tag type is not a DoubleWord type!");
         }
 
 
@@ -483,16 +440,18 @@ public class XGBCNetClient {
         StringBuilder data = new StringBuilder();
 
 
-        String includedDoubleAddr =  XGBCNetUtil.multiplyAddress(deviceLenAndName,2);
+        String includedDoubleAddr = XGBCNetUtil.multiplyAddress(deviceLenAndName, 2);
+
+
+
         //PLC DD diye bir adres tanımıyor!
-        includedDoubleAddr = includedDoubleAddr.replace("DD","DW");
+        includedDoubleAddr = includedDoubleAddr.replace("DD", "DW");
 
         data.append(includedDoubleAddr);
 
         data.append(numberOfBlocks);
 
         data.append(XGBCNetUtil.swap(tagValue));
-
 
 
         String request = finalizeRequestMessage(Command.W, CommandType.SB, data.toString(), null);
@@ -518,10 +477,10 @@ public class XGBCNetClient {
     6 1
     */
 
-        if((tag.getDataType() != DataType.Word)){
+        if ((tag.getDataType() != DataType.Word)) {
             throw new IllegalArgumentException("The tag's data type must be a word when reading a string!");
         }
-        if(theLimitToWrite>64){
+        if (theLimitToWrite > 64) {
             throw new IllegalArgumentException("The parameter theLimitToWrite must not be greater than 64!");
         }
 
@@ -545,9 +504,8 @@ public class XGBCNetClient {
         }
 
         int _len = stringLen;
-        if(tag.getDataType() == DataType.Word)
-            _len/=2;
-
+        if (tag.getDataType() == DataType.Word)
+            _len /= 2;
 
 
         String lenInHex = Integer.toHexString(_len);
@@ -570,42 +528,41 @@ public class XGBCNetClient {
     }
 
 
+    public synchronized Response writeBit(Tag tag, boolean flag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
 
-
-    public synchronized Response writeBit(Tag tag,boolean flag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-
-        if(tag.getDataType()!=DataType.Bit){
-            throw  new IllegalArgumentException("This tag type is not a Bit type!");
+        if (tag.getDataType() != DataType.Bit) {
+            throw new IllegalArgumentException("This tag type is not a Bit type!");
         }
 
-        String value = flag?"01":"00";
+        String value = flag ? "01" : "00";
 
-        String request = finalizeRequestMessage(Command.W,CommandType.SS,"01"+tag.formatToRequest()+value,null);
+        String request = finalizeRequestMessage(Command.W, CommandType.SS, "01" + tag.formatToRequest() + value, null);
         ResponseEvaluator re = sendRequestFrame(request);
-        if(re.getResponse() instanceof  AckResponse){
+        if (re.getResponse() instanceof AckResponse) {
             tag.setValueAsHexString(value);
         }
         return re.getResponse();
 
 
-
-
-
     }
 
 
-    public void clearRegisteredDevices(){
+    public void clearRegisteredDevices() {
 
 
         ArrayList<Tag> tags = (ArrayList<Tag>) regNumbersAndDevices.get(9);
 
         regNumbersAndDevices.clear();
 
-        regNumbersAndDevices.put(9,tags);
+        regNumbersAndDevices.put(9, tags);
 
 
     }
 
+    @Override
+    public void onDataReceived(String data, String requestId) {
+        serialReader.setResponse(requestId, data);
+    }
 }
 
 

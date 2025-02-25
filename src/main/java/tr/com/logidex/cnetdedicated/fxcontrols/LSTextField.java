@@ -220,7 +220,7 @@ public class LSTextField extends TextField {
         // property uzerinden verilen adresler word adresleridir. 32 bit okuma yapilacaksa
         // double adresine erismek icin verilen adresin yarisi alinmalidir.
         if (getDataTypeForDataLen(getDataType()) == DataType.Dword) {
-            int newAddress = Integer.parseInt(tagAddress) / 2;
+            int  newAddress = Integer.parseInt(tagAddress) / 2;
             tagAddress = String.valueOf(newAddress);
         }
 

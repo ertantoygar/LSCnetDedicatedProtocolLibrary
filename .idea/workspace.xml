@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="SerialPortIOException changed to IOException.">
+    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="wait time is parametric">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/XGBCNetUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/XGBCNetUtil.java" afterDir="false" />
@@ -33,6 +35,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ertantoygar&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ertantoygar/LSCnetDedicatedProtocolLibrary&quot;,
+    &quot;accountId&quot;: &quot;06efc276-22e4-4ca1-aaf3-e84615d9f8b1&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -58,8 +72,9 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Storage/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/spreadingmachinecwithcnetprotocol&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -80,10 +95,26 @@
       <recent name="C:\Storage\PROJELER\LogidexJavaClassLibraries\LSElectricCNETDedicatedProtocol\src\main\java" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="LSElectricCNETDedicatedProtocol" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="LSElectricCNETDedicatedProtocol" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-17.0.9-corretto-17.0.9-f644763e9732-ebaef533" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18968.26" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18968.26" />
       </set>
     </attachedChunks>
   </component>
@@ -108,6 +139,23 @@
       <workItem from="1720432465136" duration="6904000" />
       <workItem from="1720685826088" duration="680000" />
       <workItem from="1720776796125" duration="1962000" />
+      <workItem from="1721381269271" duration="5004000" />
+      <workItem from="1721912531131" duration="9679000" />
+      <workItem from="1722071970967" duration="1700000" />
+      <workItem from="1722153482893" duration="1714000" />
+      <workItem from="1722419233240" duration="799000" />
+      <workItem from="1722506046940" duration="106000" />
+      <workItem from="1726749871488" duration="672000" />
+      <workItem from="1726759235769" duration="2518000" />
+      <workItem from="1726901755442" duration="3377000" />
+      <workItem from="1726993661415" duration="1217000" />
+      <workItem from="1727072387037" duration="1188000" />
+      <workItem from="1727161695050" duration="988000" />
+      <workItem from="1727162695896" duration="3948000" />
+      <workItem from="1733822904739" duration="2030000" />
+      <workItem from="1733827201709" duration="594000" />
+      <workItem from="1734099534033" duration="743000" />
+      <workItem from="1734184084938" duration="7000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />

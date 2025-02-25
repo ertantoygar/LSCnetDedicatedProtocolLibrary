@@ -298,6 +298,7 @@ public class LSButton extends Button {
         }
     }
 
+
     private void pressed() {
         switch (actionType.get()) {
 
@@ -341,6 +342,7 @@ public class LSButton extends Button {
                 released();
             });
 
+
         } else {
 
 
@@ -361,6 +363,10 @@ public class LSButton extends Button {
 
 
     }
+
+
+
+
 
     private void write(Tag tag, boolean b) {
         t = new Thread(new Runnable() {
