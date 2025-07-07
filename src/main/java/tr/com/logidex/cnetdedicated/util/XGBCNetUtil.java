@@ -123,7 +123,7 @@ public class XGBCNetUtil {
 
     public static String swap(String str) {
         if (str.length() != 8) {
-            throw new IllegalArgumentException("Stringin uzunluğu 8 olmalıdır.");
+            throw new IllegalArgumentException("The length of the string must be 8.");
         }
         String first4 = str.substring(0, 4);
         String last4 = str.substring(4, 8);
