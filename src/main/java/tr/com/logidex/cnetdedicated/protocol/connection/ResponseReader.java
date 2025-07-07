@@ -6,9 +6,7 @@ public interface ResponseReader {
     void setResponse(String requestId, String data);
     void sendRequest(String request, String requestId) throws IOException;
     ConcurrentHashMap<String, String> getRequestResponseMap();
-
-
-      default void clearResponse(String requestId) {
+    default void clearResponse(String requestId) {
         if (getRequestResponseMap().containsKey(requestId)) {
             getRequestResponseMap().remove(requestId);
         }

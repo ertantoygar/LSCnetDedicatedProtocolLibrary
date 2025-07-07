@@ -1,5 +1,4 @@
 package tr.com.logidex.cnetdedicated.protocol;
-
 public enum Command {
     /**
      * Read
@@ -9,14 +8,12 @@ public enum Command {
      * Write
      */
     W,
-
     /**
      * Register device monitor
      */
     X,
-
     /**
-     *Execute registered device to monitor
+     * Execute registered device to monitor
      */
     Y
 }

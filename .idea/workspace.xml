@@ -5,27 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="Connection factory was created.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchInputUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchKeyboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnectionParams.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LSPLCtest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/NumPad.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialConnectionParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnectionParams.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +78,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "ConnectionFactory",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java",

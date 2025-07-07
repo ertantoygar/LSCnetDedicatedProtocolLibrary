@@ -5,15 +5,20 @@ import tr.com.logidex.cnetdedicated.protocol.Parity;
 
 import java.io.IOException;
 public class SerialConnection implements Connection {
-
-
+    private SerialPort serialPort;
+    private SerialReader serialReader;
+    public SerialConnection(SerialConnectionParams params) {
+        serialPort = SerialPort.getCommPort(params.getPortName());
+        serialPort.setBaudRate(params.getBaudRate());
+        serialPort.setParity(parityValueOf(params.getParity()));
+        serialPort.setNumDataBits(params.getDataBits());
+        serialPort.setNumStopBits(params.getStopBits());
+        serialReader = new SerialReader(serialPort, XGBCNetClient.getInstance());
+    }
 
 
     private int parityValueOf(Parity parity) {
-
         int intParity = 0;
-
-
         switch (parity) {
             case odd:
                 intParity = SerialPort.ODD_PARITY;
@@ -33,26 +38,7 @@ public class SerialConnection implements Connection {
             default:
                 break;
         }
-
         return intParity;
-    }
-
-
-
-    private SerialPort serialPort;
-    private SerialReader serialReader;
-
-    public SerialConnection(SerialConnectionParams params) {
-
-        serialPort = SerialPort.getCommPort(params.getPortName());
-        serialPort.setBaudRate(params.getBaudRate());
-        serialPort.setParity(parityValueOf(params.getParity()));
-        serialPort.setNumDataBits(params.getDataBits());
-        serialPort.setNumStopBits(params.getStopBits());
-
-        serialReader = new SerialReader(serialPort, XGBCNetClient.getInstance());
-
-
     }
 
 
@@ -70,14 +56,13 @@ public class SerialConnection implements Connection {
 
     @Override
     public boolean isConnected() {
-      return  serialPort.isOpen();
-
+        return serialPort.isOpen();
     }
 
 
     @Override
     public void sendRequest(String requestMessage, String requestId) throws IOException {
-        serialReader.sendRequest(requestMessage,requestId);
+        serialReader.sendRequest(requestMessage, requestId);
     }
 
 
@@ -85,7 +70,4 @@ public class SerialConnection implements Connection {
     public ResponseReader getResponseReader() {
         return serialReader;
     }
-
-
-
 }
