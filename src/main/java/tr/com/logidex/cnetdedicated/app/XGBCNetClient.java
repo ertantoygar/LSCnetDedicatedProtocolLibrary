@@ -7,10 +7,7 @@ import tr.com.logidex.cnetdedicated.device.DataType;
 import tr.com.logidex.cnetdedicated.device.RegisteredDataBlock;
 import tr.com.logidex.cnetdedicated.device.Tag;
 import tr.com.logidex.cnetdedicated.protocol.*;
-import tr.com.logidex.cnetdedicated.protocol.connection.Connection;
-import tr.com.logidex.cnetdedicated.protocol.connection.ConnectionFactory;
-import tr.com.logidex.cnetdedicated.protocol.connection.ConnectionParams;
-import tr.com.logidex.cnetdedicated.protocol.connection.SerialReader;
+import tr.com.logidex.cnetdedicated.protocol.connection.*;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.FrameCheckException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoAcknowledgeMessageFromThePLCException;
 import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
@@ -23,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class XGBCNetClient implements SerialReader.SerialReaderObserver {
+public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPReader.TCPReaderObserver {
 
 
     private static XGBCNetClient instance;
@@ -88,7 +85,7 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
     }
 
 
-    public boolean connect(ConnectionParams connectionParams) {
+    public boolean connect(ConnectionParams connectionParams) throws Exception {
 
          connection = ConnectionFactory.createConnection(connectionParams);
 
@@ -249,6 +246,8 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver {
 
         String response = connection.getResponseReader().getResponse(requestId);
         logger.log(Level.INFO, "Response for request " + requestId + ": " + response);
+
+
 
 
         if (response.trim().isEmpty()) {

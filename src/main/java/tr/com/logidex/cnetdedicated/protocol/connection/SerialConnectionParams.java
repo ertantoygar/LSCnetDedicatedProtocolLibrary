@@ -1,5 +1,5 @@
-package tr.com.logidex.cnetdedicated.protocol;
-import tr.com.logidex.cnetdedicated.protocol.connection.ConnectionParams;
+package tr.com.logidex.cnetdedicated.protocol.connection;
+import tr.com.logidex.cnetdedicated.protocol.Parity;
 public class SerialConnectionParams extends ConnectionParams {
 
 

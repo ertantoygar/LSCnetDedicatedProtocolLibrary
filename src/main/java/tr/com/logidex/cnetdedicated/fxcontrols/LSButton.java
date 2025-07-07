@@ -71,7 +71,7 @@ public class LSButton extends Button {
     private ObjectProperty<BtnActionType> actionType = new SimpleObjectProperty<BtnActionType>();
     private ObjectProperty<Device> device = new SimpleObjectProperty<Device>();
     private StringProperty tagAddressInHex = new SimpleStringProperty();
-
+    private StringProperty name = new SimpleStringProperty();
     /**
      * ana bite yazilinca aynisi varsa bu bite de yazilir.
      */
@@ -100,6 +100,17 @@ public class LSButton extends Button {
     public StringProperty tagAddressInHexProperty() {
         return tagAddressInHex;
     }
+
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
 
     public BtnActionType getActionType() {
         return actionType.get();
@@ -137,7 +148,7 @@ public class LSButton extends Button {
         if (!this.twinBitAddressInHex.get().equals("")) {
 
 
-            tagTwin = new Tag(deviceProperty().get(), DataType.Bit, this.twinBitAddressInHex.get(), DisplayFormat.BINARY, null);
+            tagTwin = new Tag(nameProperty().get(), deviceProperty().get(), DataType.Bit, this.twinBitAddressInHex.get(), DisplayFormat.BINARY, null);
 
 
         }
@@ -157,7 +168,7 @@ public class LSButton extends Button {
             backWordIndex = backAddressInHex.get().substring(0, backAddressInHex.get().length() - 1);
             backWordIndex = backWordIndex.equals("") ? "0" : backWordIndex;
             fBackBitPositionInTheWord = String.valueOf(backAddressInHex.get().charAt(backAddressInHex.get().length() - 1));
-            tagRead = new Tag(deviceProperty().get(), DataType.Word, backWordIndex, DisplayFormat.BINARY, null);
+            tagRead = new Tag(nameProperty().get(), deviceProperty().get(), DataType.Word, backWordIndex, DisplayFormat.BINARY, null);
 
             addFbListener();
 
@@ -186,6 +197,11 @@ public class LSButton extends Button {
     }
 
 
+    public String getName() {
+        return name.get();
+    }
+
+
     public String getBackWordIndex() {
         return backWordIndex;
     }
@@ -210,8 +226,8 @@ public class LSButton extends Button {
         writeWordIndex = tagAddressInHex.substring(0, tagAddressInHex.length() - 1);
         writeWordIndex = writeWordIndex.equals("") ? "0" : writeWordIndex;
 
-        tagWrite = new Tag(deviceProperty().get(), DataType.Bit, tagAddressInHex, DisplayFormat.BINARY, null);
-        tagRead = new Tag(deviceProperty().get(), DataType.Word, writeWordIndex, DisplayFormat.BINARY, null);
+        tagWrite = new Tag(nameProperty().get(), deviceProperty().get(), DataType.Bit, tagAddressInHex, DisplayFormat.BINARY, null);
+        tagRead = new Tag(nameProperty().get(), deviceProperty().get(), DataType.Word, writeWordIndex, DisplayFormat.BINARY, null);
 
 
         addFbListener();

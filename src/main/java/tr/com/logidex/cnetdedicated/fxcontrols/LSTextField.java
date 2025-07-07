@@ -56,6 +56,7 @@ public class LSTextField extends TextField {
     private IntegerProperty inputCharLimit = new SimpleIntegerProperty(MIN_INPUT_LIMIT);
     private IntegerProperty minValue = new SimpleIntegerProperty(Integer.MIN_VALUE);
     private IntegerProperty maxValue = new SimpleIntegerProperty(Integer.MAX_VALUE);
+    private StringProperty name = new SimpleStringProperty();
 
     /**
      * The eventTagWrote variable represents an instance of the TagWroteEvent class,
@@ -90,6 +91,22 @@ public class LSTextField extends TextField {
             tag.pauseUpdating();
             saveLastValue();
             selectAll();
+
+
+            if (displayFormat.get() == DisplayFormat.STRING) {
+
+
+                TouchKeyboard.getInstance().show(getText(),255,e,LSTextField.this,value ->{setText(value);});
+
+
+            } else {
+
+                TouchNumericKeypad.getInstance().show(getText(),minValue.doubleValue(),maxValue.doubleValue(),true,e,LSTextField.this,value ->{setText(value);});
+
+            }
+
+
+
 
 
         });
@@ -145,34 +162,18 @@ public class LSTextField extends TextField {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                NumPad numPad = NumPad.getInstance();
+
 
                 if (newValue) {
                     setBackground(focusedBackground);
                     tag.pauseUpdating();
 
-                    if (displayFormat.get() == DisplayFormat.STRING) {
-
-
-                        try {
-                            Runtime.getRuntime().exec("cmd /c start osk");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    } else {
-
-                        numPad.setMinMax(minValue.get(), maxValue.get());
-                        numPad.setVisible(true);
-                    }
 
 
                 } else {
                     fireEvent(new ActionEvent());
                     setBackground(defaultBackground);
                     tag.resumeUpdating();
-                    numPad.setVisible(false);
-
 
                 }
 
@@ -180,6 +181,24 @@ public class LSTextField extends TextField {
         });
 
 
+    }
+
+
+
+
+
+    public String getName() {
+        return name.get();
+    }
+
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name.set(name);
     }
 
 
@@ -227,7 +246,7 @@ public class LSTextField extends TextField {
 
         this.tagAddress.set(tagAddress);
         int tagMultiplier = isBehaveLikeAfloat() ? 1 : multiplier.getValue();
-        tag = new Tag(getDevice(), getDataTypeForDataLen(getDataType()), getTagAddress(), getDisplayFormat(), tagMultiplier);
+        tag = new Tag(nameProperty().get(), getDevice(), getDataTypeForDataLen(getDataType()), getTagAddress(), getDisplayFormat(), tagMultiplier);
 
         tag.valueProperty().addListener((observable, oldValue, newValue) -> update());
         Tooltip tt = new Tooltip();

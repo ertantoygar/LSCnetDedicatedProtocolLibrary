@@ -37,10 +37,12 @@ public class SerialReader implements ResponseReader {
             public void serialEvent(SerialPortEvent event) { if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
                 return;
             }
+
                 byte[] buffer = new byte[serialPort.bytesAvailable()];
                 int numRead = serialPort.readBytes(buffer, buffer.length);
                 String responsePart = new String(buffer);
                 responseBuffer.append(responsePart); // Gelen parçayı tampona ekle
+               // System.out.println("Response buffer:" + responseBuffer);
 
                 // Tam mesajın sonunu belirlemek için ETX (0x03) karakterini ve ardından iki hex karakteri kontrol et
                 String currentBuffer = responseBuffer.toString();
@@ -53,7 +55,11 @@ public class SerialReader implements ResponseReader {
                         observer.onDataReceived(completeResponse, requestId);
                     }
                 }
+
             }
+
+
+
         });
     }
 
@@ -73,5 +79,14 @@ public class SerialReader implements ResponseReader {
     public void setResponse(String requestId, String response) {
         requestResponseMap.put(requestId, response);
     }
+
+
+    @Override
+    public ConcurrentHashMap<String, String> getRequestResponseMap() {
+        return requestResponseMap;
+    }
+
+
+
 }
 

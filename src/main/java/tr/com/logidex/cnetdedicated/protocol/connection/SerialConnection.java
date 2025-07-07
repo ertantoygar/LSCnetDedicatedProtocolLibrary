@@ -2,7 +2,6 @@ package tr.com.logidex.cnetdedicated.protocol.connection;
 import com.fazecast.jSerialComm.SerialPort;
 import tr.com.logidex.cnetdedicated.app.XGBCNetClient;
 import tr.com.logidex.cnetdedicated.protocol.Parity;
-import tr.com.logidex.cnetdedicated.protocol.SerialConnectionParams;
 
 import java.io.IOException;
 public class SerialConnection implements Connection {

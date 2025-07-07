@@ -4,19 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="XGBCNetClient.java&#10;&#10;The function that waits for the response has been canceled.The msg queue approach was applied.">
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/LSPLCtest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionParams.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" afterDir="false" />
+    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="Connection factory was created.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchInputUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchKeyboard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnectionParams.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LSPLCtest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/ConnectionParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialConnectionParams.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/device/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/NumPad.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialConnectionParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnectionParams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ConnectionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +46,11 @@
         <option name="argument" value="--tags" />
         <option name="title" value="All" />
       </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -69,7 +83,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.CNetProtocolTest.executor": "Run",
-    "Application.LSPLCtest.executor": "Run",
+    "Application.LSPLCtest.executor": "Debug",
     "Application.Test.executor": "Run",
     "Maven.LSElectricCNETDedicatedProtocol [clean].executor": "Run",
     "Maven.LSElectricCNETDedicatedProtocol [compile].executor": "Run",
@@ -77,14 +91,17 @@
     "Maven.LScnetProtocol [clean].executor": "Run",
     "Maven.LScnetProtocol [compile].executor": "Run",
     "Maven.LScnetProtocol [deploy].executor": "Run",
+    "Maven.LScnetProtocol [install].executor": "Run",
     "Maven.LScnetProtocol [package].executor": "Run",
+    "Maven.LScnetProtocol [validate].executor": "Run",
+    "Maven.LScnetProtocol [verify].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "ConnectionFactory",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol",
+    "last_opened_file_path": "D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -93,16 +110,22 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.29898804",
+    "two.files.diff.last.used.file": "D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PROJELER\LogidexJavaClassLibraries\LSElectricCNETDedicatedProtocol\src\main\java\tr\com\logidex\cnetdedicated\fxcontrols" />
       <recent name="C:\Storage\PROJELER\LogidexJavaClassLibraries\LSElectricCNETDedicatedProtocol\src\main\java\tr\com\logidex\spreadingmachinecwithcnetprotocol" />
       <recent name="C:\Storage\PROJELER\LogidexJavaClassLibraries\LSElectricCNETDedicatedProtocol\src\main\java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Storage\PROJELER\LogidexJavaClassLibraries\LSElectricCNETDedicatedProtocol\src\main\java" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="tr.com.logidex.cnetdedicated.fxcontrols" />
+      <recent name="tr.com.logidex.cnetdedicated.protocol.connection" />
     </key>
   </component>
   <component name="RunManager">
@@ -178,7 +201,16 @@
       <workItem from="1733827201709" duration="594000" />
       <workItem from="1734099534033" duration="743000" />
       <workItem from="1734184084938" duration="7000" />
-      <workItem from="1740463234164" duration="16168000" />
+      <workItem from="1740463234164" duration="37765000" />
+      <workItem from="1740667124885" duration="10896000" />
+      <workItem from="1741935658416" duration="21235000" />
+      <workItem from="1742275397943" duration="4382000" />
+      <workItem from="1742394202463" duration="1351000" />
+      <workItem from="1742396046033" duration="593000" />
+      <workItem from="1742465350159" duration="749000" />
+      <workItem from="1743858109834" duration="864000" />
+      <workItem from="1750349565859" duration="3058000" />
+      <workItem from="1750873256816" duration="7030000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -204,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740463708732</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Connection factory was created.">
+      <option name="closed" value="true" />
+      <created>1740485421552</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740485421552</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,6 +265,7 @@
     <MESSAGE value="First commit" />
     <MESSAGE value="SerialPortIOException changed to IOException." />
     <MESSAGE value="XGBCNetClient.java&#10;&#10;The function that waits for the response has been canceled.The msg queue approach was applied." />
-    <option name="LAST_COMMIT_MESSAGE" value="XGBCNetClient.java&#10;&#10;The function that waits for the response has been canceled.The msg queue approach was applied." />
+    <MESSAGE value="Connection factory was created." />
+    <option name="LAST_COMMIT_MESSAGE" value="Connection factory was created." />
   </component>
 </project>

@@ -4,8 +4,13 @@ package tr.com.logidex.cnetdedicated.device;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import tr.com.logidex.cnetdedicated.protocol.Response;
+import tr.com.logidex.cnetdedicated.protocol.exceptions.FrameCheckException;
+import tr.com.logidex.cnetdedicated.protocol.exceptions.NoAcknowledgeMessageFromThePLCException;
+import tr.com.logidex.cnetdedicated.protocol.exceptions.NoResponseException;
 import tr.com.logidex.cnetdedicated.util.XGBCNetUtil;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 public class Tag {
@@ -13,6 +18,7 @@ public class Tag {
     private Device device;
     private DataType dataType;
     private String address;
+    private final String name;
 
     private String valueAsHexString;
 
@@ -26,8 +32,9 @@ public class Tag {
     private SimpleBooleanProperty dontUpdate = new SimpleBooleanProperty();
 
 
-    public Tag(Device device, DataType dataType, String addr, DisplayFormat displayFormat, Integer multiplier) {
+    public Tag(String name,Device device, DataType dataType, String addr, DisplayFormat displayFormat, Integer multiplier) {
 
+        this.name =name;
         this.device = device;
         this.dataType = dataType;
         this.address = addr;
@@ -42,7 +49,15 @@ public class Tag {
 
 
 
+
+
     }
+
+
+    public String getName() {
+        return name;
+    }
+
 
     public StringProperty valueProperty() {
         return value;
@@ -208,6 +223,8 @@ public class Tag {
     }
 
 
+
+
     public boolean isNumericTag() {
         return numericTag;
     }
@@ -241,4 +258,27 @@ public class Tag {
         dontUpdate.set(false);
         
     }
+
+
+    public static boolean getStatusOfBit(Tag tag, Integer bitIndex) {
+        String binaryString = Integer.toBinaryString(Integer.parseInt(tag.getValue()));
+        binaryString = XGBCNetUtil.addZeroToStart(16, binaryString);
+        return XGBCNetUtil.checkBit16(binaryString, bitIndex);
+    }
+
+
+    public static Tag setBitOf(Tag tag, Integer bitToSet, boolean value) {
+        Integer tagValue = Integer.parseInt(tag.getValue());
+        Integer newValue;
+        if (value) {
+            newValue = (tagValue | (1 << bitToSet));
+        } else {
+            newValue = (tagValue & (~(1 << bitToSet)));
+        }
+        tag.setValueAsHexString(tag.toHexString(Short.valueOf(String.valueOf(newValue))));
+        return tag;
+    }
+
+
+
 }
