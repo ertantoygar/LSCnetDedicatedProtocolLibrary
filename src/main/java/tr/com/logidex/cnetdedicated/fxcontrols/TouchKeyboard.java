@@ -318,6 +318,7 @@ public class TouchKeyboard {
             showInputError("Maksimum karakter sınırına ulaşıldı!");
             return;
         }
+
         String charToAdd;
         if (isLetter) {
             // Harf tuşları için caps lock ve shift kontrolü
@@ -327,6 +328,7 @@ public class TouchKeyboard {
             // Diğer karakterler için sadece shift kontrolü
             charToAdd = (shiftPressed && !shiftChar.isEmpty()) ? shiftChar : normalChar;
         }
+
         inputField.appendText(charToAdd);
         // Shift tek kullanımlık, basıldıktan sonra sıfırlanır
         if (shiftPressed) {

@@ -60,62 +60,88 @@ public class LSTextField extends TextField {
             tag.pauseUpdating();
             saveLastValue();
             selectAll();
+            setBackground(focusedBackground);
             if (displayFormat.get() == DisplayFormat.STRING) {
                 TouchKeyboard.getInstance().show(getText(), 255, e, LSTextField.this, value -> {
+
+
                     setText(value);
+                    Platform.runLater(()->{
+                        performAction();
+                    });
+
+
+
                 });
             } else {
                 TouchNumericKeypad.getInstance().show(getText(), minValue.doubleValue(), maxValue.doubleValue(), true, e, LSTextField.this, value -> {
+
                     setText(value);
+                    Platform.runLater(()->{
+                        performAction();
+                    });
+
                 });
             }
         });
-        setOnAction(e -> {
-            System.out.println(e.getSource());
-            if (!valid() && !behaveLikeAfloat.get()) {
-                setText(getLastValue());
-                getTag().resumeUpdating();
-                if (getScene() != null) {
-                    getScene().getRoot().requestFocus();
-                }
-                e.consume();
-                return;
-            }
-            setByItsDataType();
-            try {
-                if (getDisplayFormat().equals(DisplayFormat.STRING)) {
-                    XGBCNetClient.getInstance().writeSingleString(getTag(), getTag().getValue(), inputCharLimitProperty().get());
-                } else {
-                    if (tag.getDataType() == DataType.Word) {
-                        XGBCNetClient.getInstance().writeSingle(getTag());
-                    } else if (tag.getDataType() == DataType.Dword) {
-                        XGBCNetClient.getInstance().writeDouble(getTag());
-                    }
-                }
-                if (getScene() != null) { // fire metodu ile deger degistiginde getscene nul donuyor
-                    getScene().getRoot().requestFocus();
-                }
-                getTag().resumeUpdating();
-            } catch (IOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
-                     FrameCheckException ex) {
-                ex.printStackTrace();
-            }
-        });
+
         setBackground(defaultBackground);
         setStyle("-fx-border-color: #9f9c9c;-fx-border-radius: 5px");
-        focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    setBackground(focusedBackground);
-                    tag.pauseUpdating();
-                } else {
-                    fireEvent(new ActionEvent());
-                    setBackground(defaultBackground);
-                    tag.resumeUpdating();
+
+
+//        focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//                if (newValue) {
+//                    setBackground(focusedBackground);
+//                    tag.pauseUpdating();
+//                } else {
+//                    fireEvent(new ActionEvent());
+//                    setBackground(defaultBackground);
+//                    tag.resumeUpdating();
+//                }
+//            }
+//        });
+
+
+    }
+
+
+    private void performAction() {
+
+        boolean isValid = valid();
+        if (!isValid && !behaveLikeAfloat.get()) {
+            setText(getLastValue());
+            getTag().resumeUpdating();
+            if (getScene() != null) {
+                getScene().getRoot().requestFocus();
+            }
+
+            return;
+        }
+        setByItsDataType();
+        try {
+            if (getDisplayFormat().equals(DisplayFormat.STRING)) {
+                XGBCNetClient.getInstance().writeSingleString(getTag(), getTag().getValue(), inputCharLimitProperty().get());
+            } else {
+                if (tag.getDataType() == DataType.Word) {
+                    XGBCNetClient.getInstance().writeSingle(getTag());
+                } else if (tag.getDataType() == DataType.Dword) {
+                    XGBCNetClient.getInstance().writeDouble(getTag());
                 }
             }
-        });
+            if (getScene() != null) { // fire metodu ile deger degistiginde getscene nul donuyor
+                getScene().getRoot().requestFocus();
+            }
+            getTag().resumeUpdating();
+        } catch (IOException | NoAcknowledgeMessageFromThePLCException | NoResponseException |
+                 FrameCheckException ex) {
+            ex.printStackTrace();
+        }
+
+
+        setBackground(defaultBackground);
+        tag.resumeUpdating();
     }
 
 
