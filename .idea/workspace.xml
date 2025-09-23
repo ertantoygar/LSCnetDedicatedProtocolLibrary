@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="reformat code">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/TestMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasLSTextField.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchKeyboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchKeyboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/SerialReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +50,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ertantoygar/LSCnetDedicatedProtocolLibrary&quot;,
-    &quot;accountId&quot;: &quot;06efc276-22e4-4ca1-aaf3-e84615d9f8b1&quot;
+    &quot;url&quot;: &quot;https://github.com/ertantoygar/LSCnetDedicatedProtocolLibrary.git&quot;,
+    &quot;accountId&quot;: &quot;72d70ab4-4859-409c-bab5-2d823e8c79e4&quot;
   }
 }</component>
   <component name="MarkdownSettingsMigration">
@@ -57,7 +61,7 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2diVCcU6AKupiMQyn7vFBTNuvuG" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -69,6 +73,7 @@
     &quot;Application.CNetProtocolTest.executor&quot;: &quot;Run&quot;,
     &quot;Application.LSPLCtest.executor&quot;: &quot;Debug&quot;,
     &quot;Application.Test.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestMain.executor&quot;: &quot;Debug&quot;,
     &quot;Maven.LSElectricCNETDedicatedProtocol [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LSElectricCNETDedicatedProtocol [compile].executor&quot;: &quot;Run&quot;,
     &quot;Maven.LSElectricCNETDedicatedProtocol [package].executor&quot;: &quot;Run&quot;,
@@ -81,6 +86,8 @@
     &quot;Maven.LScnetProtocol [verify].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
@@ -91,9 +98,10 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.29898804&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.1625&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.59490335&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;two.files.diff.last.used.file&quot;: &quot;D:/PROJELER/LogidexJavaClassLibraries/LSElectricCNETDedicatedProtocol/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -112,10 +120,56 @@
       <recent name="tr.com.logidex.cnetdedicated.protocol.connection" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TestMain">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="LSElectricCNETDedicatedProtocol" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="LSElectricCNETDedicatedProtocol" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LSPLCtest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="LSPLCtest" />
       <module name="LScnetProtocol" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LSPLCtest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="LSPLCtest" />
+      <module name="LScnetProtocol" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="tr.com.logidex.cnetdedicated.TestMain" />
+      <module name="LScnetProtocol" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tr.com.logidex.cnetdedicated.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="tr.com.logidex.cnetdedicated.TestMain" />
+      <module name="LScnetProtocol" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tr.com.logidex.cnetdedicated.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -133,8 +187,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.LSPLCtest" />
+      <item itemvalue="Application.TestMain" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestMain" />
         <item itemvalue="Application.LSPLCtest" />
       </list>
     </recent_temporary>
@@ -142,8 +201,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18968.26" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18968.26" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
@@ -196,6 +255,14 @@
       <workItem from="1750349565859" duration="3058000" />
       <workItem from="1750873256816" duration="7030000" />
       <workItem from="1754239464841" duration="7716000" />
+      <workItem from="1758003138838" duration="671000" />
+      <workItem from="1758003951527" duration="3801000" />
+      <workItem from="1758008889377" duration="340000" />
+      <workItem from="1758009298855" duration="2106000" />
+      <workItem from="1758011433792" duration="618000" />
+      <workItem from="1758012088784" duration="26227000" />
+      <workItem from="1758305448051" duration="20439000" />
+      <workItem from="1758526248997" duration="18422000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />

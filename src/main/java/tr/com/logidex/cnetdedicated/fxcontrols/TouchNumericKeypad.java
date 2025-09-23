@@ -1,5 +1,6 @@
 package tr.com.logidex.cnetdedicated.fxcontrols;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -13,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tr.com.logidex.cnetdedicated.app.XGBCNetClient;
 
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -35,13 +37,14 @@ public class TouchNumericKeypad {
     private double maxValue = Double.POSITIVE_INFINITY;
     // Sadece tamsayı girişi kontrolü
     private boolean integerOnly = false;
-
+    private boolean allSelected;
 
     /**
      * Private constructor - singleton desenini uygulamak için
      */
     private TouchNumericKeypad() {
-        // DialogPane, ilk kullanımda oluşturulacak
+
+
     }
 
 
@@ -82,6 +85,41 @@ public class TouchNumericKeypad {
         inputField = new TextField();
         inputField.setStyle("-fx-font-size: 24px; -fx-padding: 10px;");
         inputField.getStyleClass().add("keypad-input");
+
+
+      /// ///
+// XGBCNetClient.touchScreen.get() kontrolü ile hybrid yaklaşım
+        if (XGBCNetClient.touchScreen.get()) {
+            // Try touch first
+            inputField.setOnTouchPressed(event -> {
+                if(allSelected) {
+                    inputField.deselect();
+                    allSelected = false;
+                }
+                event.consume(); // Prevent synthesis
+            });
+
+            // Fallback to synthesized mouse events
+            inputField.setOnMouseClicked(event -> {
+                if (event.isSynthesized()) {
+                    if(allSelected) {
+                        inputField.deselect();
+                        allSelected = false;
+                    }
+                }
+            });
+        } else {
+            // Mouse-only environment
+            inputField.setOnMouseClicked(event -> {
+                if(allSelected) {
+                    inputField.deselect();
+                    allSelected = false;
+                }
+            });
+        }
+
+/// //
+
         grid.add(inputField, 0, 0, 4, 1);
         // Min-Max Değerlerini gösteren etiket
         Label minMaxLabel = new Label(String.format("İzin verilen aralık: %.2f - %.2f", minValue, maxValue));
@@ -109,7 +147,22 @@ public class TouchNumericKeypad {
         cancelButton.setStyle("-fx-base: #FF9800;");
         cancelButton.setMinSize(350, 60);
         cancelButton.setFont(Font.font("System", FontWeight.BOLD, 18));
-        cancelButton.setOnAction(e -> closeKeypad(dialog, null));
+//        cancelButton.setOnAction(e -> closeKeypad(dialog, null));
+        if (XGBCNetClient.touchScreen.get()) {
+            cancelButton.setOnTouchPressed(event -> {
+                closeKeypad(dialog, null);
+                event.consume();
+            });
+
+            cancelButton.setOnMouseClicked(event -> {
+                if (event.isSynthesized()) {
+                    closeKeypad(dialog, null);
+                }
+            });
+        } else {
+            cancelButton.setOnAction(e -> closeKeypad(dialog, null));
+        }
+
         grid.add(cancelButton, 0, 6, 4, 1); // Satır numarasını bir arttır
         GridPane.setMargin(cancelButton, new Insets(10, 0, 0, 0));
         dialog.getDialogPane().setContent(grid);
@@ -156,8 +209,25 @@ public class TouchNumericKeypad {
             }
         }
         // Tuş işlevleri
-        button.setOnAction(e -> handleButtonPress(label, dialog));
+        setupButtonHandler(button, label, dialog);
         return button;
+    }
+
+    private void setupButtonHandler(Button button, String label, Dialog<String> dialog) {
+        if (XGBCNetClient.touchScreen.get()) {
+            button.setOnTouchPressed(event -> {
+                handleButtonPress(label, dialog);
+                event.consume();
+            });
+
+            button.setOnMouseClicked(event -> {
+                if (event.isSynthesized()) {
+                    handleButtonPress(label, dialog);
+                }
+            });
+        } else {
+            button.setOnAction(e -> handleButtonPress(label, dialog));
+        }
     }
 
 
@@ -168,6 +238,13 @@ public class TouchNumericKeypad {
      * @param dialog     İlgili dialog
      */
     private void handleButtonPress(String buttonText, Dialog<String> dialog) {
+
+       if(allSelected){
+           inputField.clear();
+           inputField.requestFocus();
+           allSelected = false;
+       }
+
         switch (buttonText) {
             case "✓" -> handleConfirmButton(dialog);
             case "C" -> inputField.clear(); // Temizleme tuşu
@@ -289,6 +366,8 @@ public class TouchNumericKeypad {
         if (result != null && onValueConfirmed != null) {
             onValueConfirmed.accept(result);
         }
+        inputField.setOnMouseClicked(null);
+        inputField.setOnTouchPressed(null);
         dialog.close();
     }
 
@@ -300,12 +379,11 @@ public class TouchNumericKeypad {
      * @param minValue      Minimum izin verilen değer
      * @param maxValue      Maksimum izin verilen değer
      * @param integerOnly   Sadece tamsayı girişine izin verilip verilmeyeceği
-     * @param event         UI olayı (konumlandırma için)
      * @param sourceControl Olayı tetikleyen kontrol
      * @param callback      Değer onaylandığında çağrılacak callback
      */
     public void show(String initialValue, double minValue, double maxValue, boolean integerOnly,
-                     MouseEvent event, Control sourceControl, Consumer<String> callback) {
+                    Control sourceControl, Consumer<String> callback ) {
         // Parametreleri ayarla
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -317,8 +395,9 @@ public class TouchNumericKeypad {
         inputField.setText(initialValue);
         inputField.setStyle("-fx-font-size: 24px; -fx-padding: 10px;");
         inputField.selectAll();
+        allSelected = true;
         // Dialog penceresini doğru konuma yerleştir
-        positionKeypad(dialog, event, sourceControl);
+        positionKeypad(dialog, sourceControl);
         // Klavyeyi göster
         dialog.showAndWait();
     }
@@ -328,10 +407,9 @@ public class TouchNumericKeypad {
      * Klavyeyi uygun konuma yerleştirir
      *
      * @param dialog        Dialog nesnesi
-     * @param event         UI olayı
      * @param sourceControl Olayı tetikleyen kontrol
      */
-    private void positionKeypad(Dialog<String> dialog, MouseEvent event, Control sourceControl) {
+    private void positionKeypad(Dialog<String> dialog, Control sourceControl) {
         // Dialog'un yerleştirilmesi, Dialog gösterilmeden önce yapılır
         dialog.setOnShown(showEvent -> {
             Stage dialogStage = (Stage) dialog.getDialogPane().getScene().getWindow();
@@ -342,16 +420,13 @@ public class TouchNumericKeypad {
             double dialogWidth = dialogStage.getWidth();
             double dialogHeight = dialogStage.getHeight();
             double x, y;
-            if (event != null && sourceControl != null && sourceControl.getScene() != null) {
+            if ( sourceControl != null && sourceControl.getScene() != null) {
                 // Olayın koordinatlarını al
                 Scene scene = sourceControl.getScene();
                 Stage sourceStage = (Stage) scene.getWindow();
                 // Sahnenin pencere üzerindeki konumunu al
                 double windowX = sourceStage.getX();
                 double windowY = sourceStage.getY();
-                // Olayın sahne üzerindeki konumunu al
-                double sceneX = event.getSceneX();
-                double sceneY = event.getSceneY();
                 // Kontrol'ün konumunu belirle
                 x = screenBounds.getMinX() + 20;
                 y = screenBounds.getMinY() + 20;

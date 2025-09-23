@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
@@ -74,7 +75,7 @@ public class LSTextField extends TextField {
 
                 });
             } else {
-                TouchNumericKeypad.getInstance().show(getText(), minValue.doubleValue(), maxValue.doubleValue(), true, e, LSTextField.this, value -> {
+                TouchNumericKeypad.getInstance().show(getText(), minValue.doubleValue(), maxValue.doubleValue(), true, (Control)e.getSource(), value -> {
 
                     setText(value);
                     Platform.runLater(()->{
@@ -89,25 +90,13 @@ public class LSTextField extends TextField {
         setStyle("-fx-border-color: #9f9c9c;-fx-border-radius: 5px");
 
 
-//        focusedProperty().addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//                if (newValue) {
-//                    setBackground(focusedBackground);
-//                    tag.pauseUpdating();
-//                } else {
-//                    fireEvent(new ActionEvent());
-//                    setBackground(defaultBackground);
-//                    tag.resumeUpdating();
-//                }
-//            }
-//        });
+
 
 
     }
 
 
-    private void performAction() {
+    protected void performAction() {
 
         boolean isValid = valid();
         if (!isValid && !behaveLikeAfloat.get()) {
