@@ -69,26 +69,12 @@ public class ImperialMeasurementInputGroup extends Group {
 
 
     private void setupFieldHandler(TextField field, Consumer<Control> handler) {
-        if (XGBCNetClient.touchScreen.get()) {
-            // Try touch first
-            field.setOnTouchPressed((event) -> {
-                System.out.printf("TouchPressed ");
-                handler.accept(field);
-                event.consume(); // Prevent synthesis
-            });
-            // Fallback to synthesized mouse events
-            field.setOnMouseClicked((event) -> {
-                if (event.isSynthesized()) {
-                    System.out.printf("setOnMouseClicked sythesized ");
-                    handler.accept(field);
-                }
-            });
-        } else {
+
             field.setOnMouseClicked((event) -> {
                 System.out.printf("setOnMouseClicked normal");
                     handler.accept(field);
             });
-        }
+
     }
 
 

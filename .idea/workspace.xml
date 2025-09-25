@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="reformat code">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/TestMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasLSTextField.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/LSTextField.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -98,7 +92,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.1625&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.59490335&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
@@ -201,8 +195,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
       </set>
     </attachedChunks>
   </component>
@@ -263,6 +257,8 @@
       <workItem from="1758012088784" duration="26227000" />
       <workItem from="1758305448051" duration="20439000" />
       <workItem from="1758526248997" duration="18422000" />
+      <workItem from="1758793718453" duration="2427000" />
+      <workItem from="1758812473509" duration="154000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />

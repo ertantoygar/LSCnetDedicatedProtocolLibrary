@@ -87,38 +87,18 @@ public class TouchNumericKeypad {
         inputField.getStyleClass().add("keypad-input");
 
 
-      /// ///
-// XGBCNetClient.touchScreen.get() kontrolü ile hybrid yaklaşım
-        if (XGBCNetClient.touchScreen.get()) {
-            // Try touch first
-            inputField.setOnTouchPressed(event -> {
-                if(allSelected) {
-                    inputField.deselect();
-                    allSelected = false;
-                }
-                event.consume(); // Prevent synthesis
-            });
 
-            // Fallback to synthesized mouse events
-            inputField.setOnMouseClicked(event -> {
-                if (event.isSynthesized()) {
-                    if(allSelected) {
-                        inputField.deselect();
-                        allSelected = false;
-                    }
-                }
-            });
-        } else {
-            // Mouse-only environment
+
+
             inputField.setOnMouseClicked(event -> {
                 if(allSelected) {
                     inputField.deselect();
                     allSelected = false;
                 }
             });
-        }
 
-/// //
+
+
 
         grid.add(inputField, 0, 0, 4, 1);
         // Min-Max Değerlerini gösteren etiket
@@ -148,20 +128,20 @@ public class TouchNumericKeypad {
         cancelButton.setMinSize(350, 60);
         cancelButton.setFont(Font.font("System", FontWeight.BOLD, 18));
 //        cancelButton.setOnAction(e -> closeKeypad(dialog, null));
-        if (XGBCNetClient.touchScreen.get()) {
-            cancelButton.setOnTouchPressed(event -> {
-                closeKeypad(dialog, null);
-                event.consume();
-            });
-
-            cancelButton.setOnMouseClicked(event -> {
-                if (event.isSynthesized()) {
-                    closeKeypad(dialog, null);
-                }
-            });
-        } else {
+//        if (XGBCNetClient.touchScreen.get()) {
+//            cancelButton.setOnTouchPressed(event -> {
+//                closeKeypad(dialog, null);
+//                event.consume();
+//            });
+//
+//            cancelButton.setOnMouseClicked(event -> {
+//                if (event.isSynthesized()) {
+//                    closeKeypad(dialog, null);
+//                }
+//            });
+//        } else {
             cancelButton.setOnAction(e -> closeKeypad(dialog, null));
-        }
+       // }
 
         grid.add(cancelButton, 0, 6, 4, 1); // Satır numarasını bir arttır
         GridPane.setMargin(cancelButton, new Insets(10, 0, 0, 0));
@@ -214,20 +194,9 @@ public class TouchNumericKeypad {
     }
 
     private void setupButtonHandler(Button button, String label, Dialog<String> dialog) {
-        if (XGBCNetClient.touchScreen.get()) {
-            button.setOnTouchPressed(event -> {
-                handleButtonPress(label, dialog);
-                event.consume();
-            });
 
-            button.setOnMouseClicked(event -> {
-                if (event.isSynthesized()) {
-                    handleButtonPress(label, dialog);
-                }
-            });
-        } else {
             button.setOnAction(e -> handleButtonPress(label, dialog));
-        }
+
     }
 
 
