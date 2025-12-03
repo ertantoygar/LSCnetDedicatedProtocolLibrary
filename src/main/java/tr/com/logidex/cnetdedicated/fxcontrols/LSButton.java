@@ -25,7 +25,6 @@ public class LSButton extends Button {
     Border border = new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT));
     Background greenBackGround = new Background(new BackgroundFill(Color.PALEGREEN, new CornerRadii(10), javafx.geometry.Insets.EMPTY));
     Background normalBackGround = new Background(new BackgroundFill(Color.rgb(192, 205, 220), new CornerRadii(10), javafx.geometry.Insets.EMPTY));
-    private SimpleBooleanProperty touchFunctions = new SimpleBooleanProperty(true);
     private Thread t;
     private SimpleBooleanProperty readBitStatus = new SimpleBooleanProperty();
     /**
@@ -51,23 +50,34 @@ public class LSButton extends Button {
     private String writeWordIndex, backWordIndex;
     private String writeBitPositionInTheWord;
     private String fBackBitPositionInTheWord;
+    private boolean touchHandled = false;
+
     public LSButton() {
-        touchFunctions.bind(XGBCNetClient.touchScreen);
-        if (touchFunctions.get()) {
-            setOnTouchPressed(e -> {
+        // Touch event handlers - will fire on touch devices
+        setOnTouchPressed(e -> {
+            touchHandled = true;
+            pressed();
+            e.consume(); // Consume to prevent mouse event synthesis
+        });
+        setOnTouchReleased(e -> {
+            released();
+            touchHandled = false;
+            e.consume(); // Consume to prevent mouse event synthesis
+        });
+
+        // Mouse event handlers - will fire on mouse devices or from synthesized touch events
+        setOnMousePressed(e -> {
+            // Handle if: real mouse click OR synthesized from touch (when touch handlers don't fire)
+            if (!touchHandled) {
                 pressed();
-            });
-            setOnTouchReleased(e -> {
+            }
+        });
+        setOnMouseReleased(e -> {
+            // Handle if: real mouse click OR synthesized from touch (when touch handlers don't fire)
+            if (!touchHandled) {
                 released();
-            });
-        } else {
-            setOnMousePressed(e -> {
-                pressed();
-            });
-            setOnMouseReleased(e -> {
-                released();
-            });
-        }
+            }
+        });
     }
 
 
