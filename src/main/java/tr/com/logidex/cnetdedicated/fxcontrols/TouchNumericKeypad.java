@@ -30,6 +30,7 @@ public class TouchNumericKeypad {
     private Dialog<String> keypadDialog;
     // Metin alanı
     private TextField inputField;
+
     // Tamamlandığında çağrılacak callback
     private Consumer<String> onValueConfirmed;
     // Değer aralığı kontrolü için
@@ -64,7 +65,7 @@ public class TouchNumericKeypad {
     /**
      * Klavye içeriğini oluşturur
      */
-    private Dialog<String> createKeypadDialog() {
+    private Dialog<String> createKeypadDialog(Control requester) {
         Dialog<String> dialog = new Dialog<>();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.UNDECORATED);
@@ -82,7 +83,7 @@ public class TouchNumericKeypad {
         grid.setPadding(new Insets(20, 20, 20, 20));
         grid.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #666666; -fx-border-width: 2px;");
         // Metin alanı
-        inputField = new TextField();
+        inputField =  (requester instanceof PasswordField)?new PasswordField():new TextField();
         inputField.setStyle("-fx-font-size: 24px; -fx-padding: 10px;");
         inputField.getStyleClass().add("keypad-input");
 
@@ -359,7 +360,7 @@ public class TouchNumericKeypad {
         this.integerOnly = integerOnly;
         this.onValueConfirmed = callback;
         // Her kullanımda yeni Dialog nesnesi oluştur (kritik değişiklik!)
-        Dialog<String> dialog = createKeypadDialog();
+        Dialog<String> dialog = createKeypadDialog(sourceControl);
         // Başlangıç değerini ayarla
         inputField.setText(initialValue);
         inputField.setStyle("-fx-font-size: 24px; -fx-padding: 10px;");

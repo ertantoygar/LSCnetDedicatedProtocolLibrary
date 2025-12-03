@@ -22,84 +22,78 @@ public class ImperialMeasLSTextField extends LSTextField {
 
 
         defaultStyle = getStyle();
-        setOnMouseClicked(null); // remove from the super class.
+        // Remove parent class event handlers
+        setOnMouseClicked(null);
+        setOnTouchPressed(null);
 
-
-
-
-
-
-        setOnMouseClicked(e->{
-            if(popupShowing){
-                e.consume();
-                return;
-            }
-            Stage stage =  new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.setResizable(false);
-            stage.setTitle("U.S/Imperial Meas.Unit");
-            GridPane gridPane = new GridPane();
-            gridPane.setHgap(10);
-
-            try {
-                inputGroup.setFromMM(Double.parseDouble(getText()));
-            }
-            catch (NumberFormatException ex) {
-
-            }
-
-            gridPane.add(inputGroup,0,0);
-            Scene scene = new Scene(gridPane);
-            stage.setScene(scene);
-            stage.setOnCloseRequest(windowEvent->{
-                popupShowing = false;
-                try {
-                    inputGroup.setNewMeasurement();
-                } catch (Exception ignore) {
-
-                }
-
-            });
-
-            popupShowing = true;
-            stage.showAndWait();
-
-
-
+        // Touch event handler
+        setOnTouchPressed(e -> {
+            handleImperialClick();
+            e.consume(); // Prevent mouse event synthesis
         });
 
+        // Mouse event handler
+        setOnMouseClicked(e -> {
+            handleImperialClick();
+        });
 
+        // Setup imperial measurement listener
+        inputGroup.imperialMeasurementProperty().addListener((meas, oldValue, newValue) -> {
+            int value = (int) Math.round(newValue.getTotalInMM());
 
-        inputGroup.imperialMeasurementProperty().addListener((meas,oldValue,newValue) -> {
-
-
-            int value =(int)Math.round(newValue.getTotalInMM());
-
-
-            if(value > getMaxValue()){
+            if (value > getMaxValue()) {
                 setText("LIM.ERR");
-                setStyle( getStyle() + ";-fx-text-fill: red;");
+                setStyle(getStyle() + ";-fx-text-fill: red;");
                 return;
             }
 
-            setStyle( defaultStyle);
+            setStyle(defaultStyle);
 
             super.setText(String.valueOf(value));
-            printable.set(newValue.yard() + "Y"+ newValue.inch()+"\"" + newValue.inchFraction()+"\'");
+            printable.set(newValue.yard() + "Y" + newValue.inch() + "\"" + newValue.inchFraction() + "\'");
 
-                getTag().pauseUpdating();
+            getTag().pauseUpdating();
 
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 performAction();
             });
+        });
+    }
 
+    private void handleImperialClick() {
+        if (popupShowing) {
+            return;
+        }
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        stage.setTitle("U.S/Imperial Meas.Unit");
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
 
+        try {
+            inputGroup.setFromMM(Double.parseDouble(getText()));
+        } catch (NumberFormatException ex) {
+
+        }
+
+        gridPane.add(inputGroup, 0, 0);
+        Scene scene = new Scene(gridPane);
+        stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> {
+            popupShowing = false;
+            try {
+                inputGroup.setNewMeasurement();
+            } catch (Exception ignore) {
+
+            }
 
         });
 
+        popupShowing = true;
+        stage.showAndWait();
     }
-
 
     public StringProperty printableProperty() {
         return printable;

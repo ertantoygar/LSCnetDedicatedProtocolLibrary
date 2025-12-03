@@ -49,6 +49,7 @@ public class LSTextField extends TextField {
      */
     private TagWroteEvent eventTagWrote = new TagWroteEvent();
     private BooleanProperty behaveLikeAfloat = new SimpleBooleanProperty();
+
     public LSTextField() {
         setFocusTraversable(false);
         update();
@@ -57,42 +58,50 @@ public class LSTextField extends TextField {
                 setText(oldValue);
             }
         });
+
+        // Touch event handler - will fire on touch devices and consume to prevent mouse synthesis
+        setOnTouchPressed(e -> {
+            // Convert touch event to mouse event for keyboard components
+            javafx.scene.input.MouseEvent mouseEvent = new javafx.scene.input.MouseEvent(
+                javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+                e.getTouchPoint().getX(), e.getTouchPoint().getY(),
+                e.getTouchPoint().getScreenX(), e.getTouchPoint().getScreenY(),
+                javafx.scene.input.MouseButton.PRIMARY, 1,
+                false, false, false, false, true, false, false, false, false, false, null
+            );
+            handleFieldClick(mouseEvent);
+            e.consume(); // Prevent mouse event synthesis
+        });
+
+        // Mouse event handler - will fire on mouse devices or when touch events don't consume
         setOnMouseClicked(e -> {
-            tag.pauseUpdating();
-            saveLastValue();
-            selectAll();
-            setBackground(focusedBackground);
-            if (displayFormat.get() == DisplayFormat.STRING) {
-                TouchKeyboard.getInstance().show(getText(), 255, e, LSTextField.this, value -> {
-
-
-                    setText(value);
-                    Platform.runLater(()->{
-                        performAction();
-                    });
-
-
-
-                });
-            } else {
-                TouchNumericKeypad.getInstance().show(getText(), minValue.doubleValue(), maxValue.doubleValue(), true, (Control)e.getSource(), value -> {
-
-                    setText(value);
-                    Platform.runLater(()->{
-                        performAction();
-                    });
-
-                });
-            }
+            handleFieldClick(e);
         });
 
         setBackground(defaultBackground);
         setStyle("-fx-border-color: #9f9c9c;-fx-border-radius: 5px");
+    }
 
-
-
-
-
+    private void handleFieldClick(javafx.scene.input.MouseEvent e) {
+        tag.pauseUpdating();
+        saveLastValue();
+        selectAll();
+        setBackground(focusedBackground);
+        if (displayFormat.get() == DisplayFormat.STRING) {
+            TouchKeyboard.getInstance().show(getText(), 255, e, LSTextField.this, value -> {
+                setText(value);
+                Platform.runLater(() -> {
+                    performAction();
+                });
+            });
+        } else {
+            TouchNumericKeypad.getInstance().show(getText(), minValue.doubleValue(), maxValue.doubleValue(), !behaveLikeAfloat.get(), (Control) e.getSource(), value -> {
+                setText(value);
+                Platform.runLater(() -> {
+                    performAction();
+                });
+            });
+        }
     }
 
 
