@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="reformat code">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/PLCCommandManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/util/TagRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/app/XGBCNetClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/Connection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/ResponseReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/SerialReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/protocol/connection/TCPReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,8 +203,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
@@ -259,6 +267,10 @@
       <workItem from="1758526248997" duration="18422000" />
       <workItem from="1758793718453" duration="2427000" />
       <workItem from="1758812473509" duration="154000" />
+      <workItem from="1764527815357" duration="13077000" />
+      <workItem from="1765146548546" duration="3044000" />
+      <workItem from="1766138093864" duration="3000" />
+      <workItem from="1766927590306" duration="14682000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
