@@ -363,7 +363,7 @@ public class LSTextField extends TextField {
         }
         Platform.runLater(() -> {
             if (behaveLikeAfloat.get()) {
-                String s = tag.getValue();
+                String s = tag.getValue().replace(',', '.');
                 float f = Float.parseFloat(s) / (float) multiplier.get();
                 this.setText(Float.toString(f));
             } else {
@@ -398,8 +398,10 @@ public class LSTextField extends TextField {
 
     public void setByItsDataType() {
         Tag tag = getTag();
+        // Virgülü noktaya çevir (locale bağımsız çalışması için)
+        String textValue = getText().replace(',', '.');
         if (behaveLikeAfloat.get()) {
-            float f = Float.parseFloat(getText());
+            float f = Float.parseFloat(textValue);
             short s = (short) (f * (float) multiplier.get());
             tag.setValueAsHexString(getTag().toHexString(s));
             return;
@@ -407,16 +409,16 @@ public class LSTextField extends TextField {
         switch (tag.getDataType()) {
             case Word:
                 if (getDisplayFormat().equals(DisplayFormat.STRING)) {
-                    tag.setValueAsHexString(getTag().toHexString(getText().getBytes()));
+                    tag.setValueAsHexString(getTag().toHexString(textValue.getBytes()));
                 } else {
-                    tag.setValueAsHexString(getTag().toHexString(Short.valueOf(getText())));
+                    tag.setValueAsHexString(getTag().toHexString(Short.valueOf(textValue)));
                 }
                 break;
             case Dword:
                 if (getDisplayFormat().equals(DisplayFormat.FLOAT)) {
-                    tag.setValueAsHexString(getTag().toHexString(Float.valueOf(getText())));
+                    tag.setValueAsHexString(getTag().toHexString(Float.valueOf(textValue)));
                 } else {
-                    tag.setValueAsHexString(getTag().toHexString(Integer.valueOf(getText())));
+                    tag.setValueAsHexString(getTag().toHexString(Integer.valueOf(textValue)));
                 }
                 break;
         }

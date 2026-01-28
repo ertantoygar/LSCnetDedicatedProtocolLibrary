@@ -236,6 +236,9 @@ public class TouchNumericKeypad {
                 closeKeypad(dialog, null);
                 return;
             }
+            // Virgülü noktaya çevir (locale bağımsız çalışması için)
+            text = text.replace(',', '.');
+            inputField.setText(text);
             // Değeri doğrula
             double value = Double.parseDouble(text);
             // Aralık kontrolü
@@ -292,8 +295,8 @@ public class TouchNumericKeypad {
             return;
         }
         String text = inputField.getText();
-        // Zaten nokta içeriyorsa yeni nokta ekleme
-        if (!text.contains(".")) {
+        // Zaten nokta veya virgül içeriyorsa yeni decimal separator ekleme
+        if (!text.contains(".") && !text.contains(",")) {
             inputField.appendText(".");
         }
     }

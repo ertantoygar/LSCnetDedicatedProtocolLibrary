@@ -73,7 +73,8 @@ public class ImperialMeasLSTextField extends LSTextField {
         gridPane.setHgap(10);
 
         try {
-            inputGroup.setFromMM(Double.parseDouble(getText()));
+            // Virgülü noktaya çevir (locale bağımsız çalışması için)
+            inputGroup.setFromMM(Double.parseDouble(getText().replace(',', '.')));
         } catch (NumberFormatException ex) {
 
         }
