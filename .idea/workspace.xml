@@ -4,15 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="reformat code">
+    <list default="true" id="086730ae-c40e-4f4a-a5c4-3cfdcefe4e9c" name="Changes" comment="The touch handlers removed from Imperial.. and TouchKeypad&#10;&#10;&#10;We benefit from synthesized event of setOnMouseClick event.">
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/ImperialMeasurementInputGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tr/com/logidex/cnetdedicated/fxcontrols/TouchNumericKeypad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/ertantoygar/IdeaProjects/LSCnetDedicatedProtocolLibrary" value="2diVCcU6AKupiMQyn7vFBTNuvuG" />
+    </persistenceIdMap>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -42,10 +49,13 @@
     &quot;assignee&quot;: &quot;ertantoygar&quot;
   }
 }</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="e59754e7-cd9d-4c85-b8a0-30b08664af46" />
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ertantoygar/LSCnetDedicatedProtocolLibrary.git&quot;,
-    &quot;accountId&quot;: &quot;72d70ab4-4859-409c-bab5-2d823e8c79e4&quot;
+    &quot;accountId&quot;: &quot;e59754e7-cd9d-4c85-b8a0-30b08664af46&quot;
   }
 }</component>
   <component name="MarkdownSettingsMigration">
@@ -258,7 +268,9 @@
       <workItem from="1758305448051" duration="20439000" />
       <workItem from="1758526248997" duration="18422000" />
       <workItem from="1758793718453" duration="2427000" />
-      <workItem from="1758812473509" duration="154000" />
+      <workItem from="1758812473509" duration="861000" />
+      <workItem from="1771786529796" duration="891000" />
+      <workItem from="1771787705907" duration="416000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -300,7 +312,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751887041511</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="The touch handlers removed from Imperial.. and TouchKeypad&#10;&#10;&#10;We benefit from synthesized event of setOnMouseClick event.">
+      <option name="closed" value="true" />
+      <created>1758812941238</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758812941238</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,6 +343,15 @@
     <MESSAGE value="XGBCNetClient.java&#10;&#10;The function that waits for the response has been canceled.The msg queue approach was applied." />
     <MESSAGE value="Connection factory was created." />
     <MESSAGE value="reformat code" />
-    <option name="LAST_COMMIT_MESSAGE" value="reformat code" />
+    <MESSAGE value="The touch handlers removed from Imperial.. and TouchKeypad&#10;&#10;&#10;We benefit from synthesized event of setOnMouseClick event." />
+    <option name="LAST_COMMIT_MESSAGE" value="The touch handlers removed from Imperial.. and TouchKeypad&#10;&#10;&#10;We benefit from synthesized event of setOnMouseClick event." />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
