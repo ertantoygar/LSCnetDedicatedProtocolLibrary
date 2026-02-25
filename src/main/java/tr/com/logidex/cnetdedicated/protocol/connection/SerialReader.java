@@ -11,7 +11,7 @@ public class SerialReader implements ResponseReader {
     private static final Logger logger = Logger.getLogger(SerialReader.class.getName());
     private SerialPort serialPort;
     private SerialReaderObserver observer;
-    private ConcurrentHashMap<String, String> requestResponseMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Object> requestResponseMap = new ConcurrentHashMap<>();
     private ConcurrentLinkedQueue<String> requestQueue = new ConcurrentLinkedQueue<>();
     private StringBuilder responseBuffer = new StringBuilder(); // Tampon için StringBuilder
     public SerialReader(SerialPort serialPort, SerialReaderObserver observer) {
@@ -59,18 +59,18 @@ public class SerialReader implements ResponseReader {
     }
 
 
-    public String getResponse(String requestId) {
+    public Object getResponse(String requestId) {
         return requestResponseMap.get(requestId);
     }
 
 
-    public void setResponse(String requestId, String response) {
+    public void setResponse(String requestId, Object response) {
         requestResponseMap.put(requestId, response);
     }
 
 
     @Override
-    public ConcurrentHashMap<String, String> getRequestResponseMap() {
+    public ConcurrentHashMap<String, Object> getRequestResponseMap() {
         return requestResponseMap;
     }
 

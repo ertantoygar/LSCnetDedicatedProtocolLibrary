@@ -27,12 +27,13 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
     private int stationNumber;
     private String strStationNumber;
     private Level logLevel = Level.SEVERE;
-    private ConcurrentHashMap<String, String> requestResponseMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Object> requestResponseMap = new ConcurrentHashMap<>();
     private Map<Integer, List<Tag>> regNumbersAndDevices = new TreeMap<Integer, List<Tag>>();
     /**
      * Represents the delay (in milliseconds) to wait for a response in the XGBCNetClient class.
      */
     private Connection connection;
+    private ProtocolHandler protocolHandler;
 
 
     private XGBCNetClient() {
@@ -65,6 +66,16 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
         connection = ConnectionFactory.createConnection(connectionParams);
         this.stationNumber = connectionParams.getStationNumber();
         strStationNumber = this.stationNumber < 10 ? "0" + stationNumber : String.valueOf(stationNumber);
+
+        // Initialize the appropriate protocol handler based on connection type
+        if (connection.isBinaryProtocol()) {
+            logger.info("Using FENet protocol for TCP connection");
+            protocolHandler = new FENetProtocolHandler();
+        } else {
+            logger.info("Using Cnet protocol for Serial connection");
+            protocolHandler = new CnetProtocolHandler(stationNumber);
+        }
+
         boolean result = connection.connect();
         return result;
     }
@@ -86,59 +97,122 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
 
 
     public synchronized void registerDevicesToMonitor(List<Tag> tags, String registrationNumber) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        StringBuilder data = new StringBuilder();
-        data.append(String.format("%02x", tags.size()));
-        // make the data
-        for (Tag da : tags) {
-            data.append(da.formatToRequest());
-        }
-        String message = finalizeRequestMessage(Command.X, CommandType.RSS, data.toString(), XGBCNetUtil.addZeroIfNeed(registrationNumber));
-        ResponseEvaluator res = sendRequestFrame(message);
-        logger.info(res.toString());
-        // x ile register isteginin sonucu olumlu ise register olan degiskenleri hafizada tutmaliyiz.
-        if (res.getResponse() instanceof AckResponse && res.getResponse().getCommand() == Command.X) {
-            String regNo = res.getResponse().getStructrizedDataArea();
-            // listemizin regNo indexine device adresleri yazmaliyiz.
-            // System.out.println(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
-            logger.info(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
-            regNumbersAndDevices.put(Integer.parseInt(regNo), tags);
+        try {
+            if (connection.isBinaryProtocol()) {
+                // FENet: Do batch read immediately
+                Object request = protocolHandler.buildRegisterRequest(tags, registrationNumber);
+                Object response = sendRequestFrameGeneric(request);
+
+                // Parse batch response
+                FENetProtocolHandler fenetHandler = (FENetProtocolHandler) protocolHandler;
+                String[] dataValues = fenetHandler.parseBatchReadResponse(response, tags);
+
+                // Update tag values
+                for (int i = 0; i < tags.size(); i++) {
+                    if (!tags.get(i).dontUpdateProperty().get()) {
+                        tags.get(i).setValueAsHexString(dataValues[i]);
+                    }
+                }
+
+                // Store tags for future executeRegisteredDeviceToMonitor calls
+                int regNo = Integer.parseInt(XGBCNetUtil.addZeroIfNeed(registrationNumber));
+                regNumbersAndDevices.put(regNo, tags);
+                logger.info("FENet batch read registered " + tags.size() + " tags with registration number: " + regNo);
+
+            } else {
+                // Cnet: Traditional register approach
+                StringBuilder data = new StringBuilder();
+                data.append(String.format("%02x", tags.size()));
+                for (Tag da : tags) {
+                    data.append(da.formatToRequest());
+                }
+                String message = finalizeRequestMessage(Command.X, CommandType.RSS, data.toString(), XGBCNetUtil.addZeroIfNeed(registrationNumber));
+                ResponseEvaluator res = sendRequestFrame(message);
+                logger.info(res.toString());
+
+                if (res.getResponse() instanceof AckResponse && res.getResponse().getCommand() == Command.X) {
+                    String regNo = res.getResponse().getStructrizedDataArea();
+                    logger.info(regNo + " kayit numarasi icin degisken kaydi yapiliyor.. Tag adedi: " + tags.size());
+                    regNumbersAndDevices.put(Integer.parseInt(regNo), tags);
+                }
+            }
+        } catch (Exception e) {
+            logger.severe("Error registering devices to monitor: " + e.getMessage());
+            throw new IOException("Error registering devices: " + e.getMessage(), e);
         }
     }
 
 
     public synchronized List<Tag> executeRegisteredDeviceToMonitor(String registrationNumber) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        registrationNumber = XGBCNetUtil.addZeroIfNeed(registrationNumber);
-        String message = finalizeRequestMessage(Command.Y, CommandType.NONE, registrationNumber, registrationNumber);
-        ResponseEvaluator re = sendRequestFrame(message);
-        logger.info(re.getResponse().toString());
-        if (re.getResponse().getCommand() == Command.Y) {
-            RegisteredDataBlock rdb = new RegisteredDataBlock();
-            String dataAreaForXorY = re.getRawResponse().substring(4, re.getRawResponse().length() - 3);
-            //parse registration number
-            StringBuilder dataBlockBuilder = new StringBuilder(dataAreaForXorY);
-            char[] regNumber = new char[2];
-            dataBlockBuilder.getChars(0, 2, regNumber, 0);
-            rdb.setRegistrationNumber(regNumber);
-            //parse NumberOfBlocks
-            char[] numOfBlocks = new char[2];
-            dataBlockBuilder.getChars(2, 4, numOfBlocks, 0);
-            rdb.setNumberOfBlocks(numOfBlocks);
-            //parse all data blocks
-            String allDataBlocks = dataBlockBuilder.substring(4, dataAreaForXorY.length());
-            rdb.setDataBlocks(parseDataForYCommand(allDataBlocks));
-            // update values
-            int regNumberInInteger = Integer.parseInt(new String(rdb.getRegistrationNumber()));
-            for (Map.Entry<Integer, List<Tag>> entry : regNumbersAndDevices.entrySet()) {
-                if (entry.getKey().equals(regNumberInInteger)) {
-                    for (int i = 0; i < rdb.getDataBlocks().size(); i++) {
-                        String value = rdb.getDataBlocks().get(i).getData();
-                        if (!entry.getValue().get(i).dontUpdateProperty().get()) {
-                            entry.getValue().get(i).setValueAsHexString(value);
-                        }
+        try {
+            registrationNumber = XGBCNetUtil.addZeroIfNeed(registrationNumber);
+            int regNumberInInteger = Integer.parseInt(registrationNumber);
+
+            // Get the registered tags
+            List<Tag> tags = regNumbersAndDevices.get(regNumberInInteger);
+            if (tags == null) {
+                logger.warning("No tags registered for registration number: " + registrationNumber);
+                return null;
+            }
+
+            if (connection.isBinaryProtocol()) {
+                // FENet: Do batch read
+                Object request = protocolHandler.buildRegisterRequest(tags, registrationNumber);
+                Object response = sendRequestFrameGeneric(request);
+
+                // Parse batch response
+                FENetProtocolHandler fenetHandler = (FENetProtocolHandler) protocolHandler;
+                String[] dataValues = fenetHandler.parseBatchReadResponse(response, tags);
+
+                // Update tag values
+                for (int i = 0; i < tags.size(); i++) {
+                    if (!tags.get(i).dontUpdateProperty().get()) {
+                        tags.get(i).setValueAsHexString(dataValues[i]);
                     }
                 }
+
+                logger.info("FENet batch read executed for " + tags.size() + " tags");
+                return tags;
+
+            } else {
+                // Cnet: Traditional execute approach
+                String message = finalizeRequestMessage(Command.Y, CommandType.NONE, registrationNumber, registrationNumber);
+                ResponseEvaluator re = sendRequestFrame(message);
+                logger.info(re.getResponse().toString());
+
+                if (re.getResponse().getCommand() == Command.Y) {
+                    RegisteredDataBlock rdb = new RegisteredDataBlock();
+                    String dataAreaForXorY = re.getRawResponse().substring(4, re.getRawResponse().length() - 3);
+                    //parse registration number
+                    StringBuilder dataBlockBuilder = new StringBuilder(dataAreaForXorY);
+                    char[] regNumber = new char[2];
+                    dataBlockBuilder.getChars(0, 2, regNumber, 0);
+                    rdb.setRegistrationNumber(regNumber);
+                    //parse NumberOfBlocks
+                    char[] numOfBlocks = new char[2];
+                    dataBlockBuilder.getChars(2, 4, numOfBlocks, 0);
+                    rdb.setNumberOfBlocks(numOfBlocks);
+                    //parse all data blocks
+                    String allDataBlocks = dataBlockBuilder.substring(4, dataAreaForXorY.length());
+                    rdb.setDataBlocks(parseDataForYCommand(allDataBlocks));
+                    // update values
+                    regNumberInInteger = Integer.parseInt(new String(rdb.getRegistrationNumber()));
+                    for (Map.Entry<Integer, List<Tag>> entry : regNumbersAndDevices.entrySet()) {
+                        if (entry.getKey().equals(regNumberInInteger)) {
+                            for (int i = 0; i < rdb.getDataBlocks().size(); i++) {
+                                String value = rdb.getDataBlocks().get(i).getData();
+                                if (!entry.getValue().get(i).dontUpdateProperty().get()) {
+                                    entry.getValue().get(i).setValueAsHexString(value);
+                                }
+                            }
+                        }
+                    }
+                    return regNumbersAndDevices.get(regNumberInInteger);
+                }
             }
-            return regNumbersAndDevices.get(regNumberInInteger);
+        } catch (Exception e) {
+            logger.severe("Error executing registered device monitor: " + e.getMessage());
+            throw new IOException("Error executing registered device: " + e.getMessage(), e);
         }
         return null;
     }
@@ -163,6 +237,47 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
     }
 
 
+    /**
+     * Generic method to send request and get response, supporting both Cnet and FENet protocols
+     */
+    private Object sendRequestFrameGeneric(Object request) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+        if (!isConnected()) {
+            throw new IOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
+        }
+
+        String requestId = java.util.UUID.randomUUID().toString();
+
+        // Send request based on type (String for Cnet, byte[] for FENet)
+        if (request instanceof String) {
+            logger.log(Level.INFO, "Request (Cnet): " + request);
+            connection.sendRequest((String) request, requestId);
+        } else if (request instanceof byte[]) {
+            logger.log(Level.INFO, "Request (FENet): Binary data, length=" + ((byte[]) request).length);
+            connection.sendRequest((byte[]) request, requestId);
+        } else {
+            throw new IOException("Unsupported request type");
+        }
+
+        // Wait for response
+        long t = System.currentTimeMillis();
+        while (connection.getResponseReader().getResponse(requestId) == null) {
+            if (System.currentTimeMillis() - t > 3000) {
+                throw new NoResponseException();
+            }
+        }
+
+        Object response = connection.getResponseReader().getResponse(requestId);
+
+        // Validate response based on protocol
+        if (!protocolHandler.isResponseValid(response)) {
+            logger.log(Level.SEVERE, "Invalid response received");
+            throw new NoAcknowledgeMessageFromThePLCException();
+        }
+
+        logger.info("Response received and validated successfully");
+        return response;
+    }
+
     private ResponseEvaluator sendRequestFrame(String requestMessage) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
         if (!isConnected()) {
             throw new IOException("Mesaj gonderme istegi yapildi, fakat port kapali!");
@@ -177,7 +292,8 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
                 throw new NoResponseException();
             }
         }
-        String response = connection.getResponseReader().getResponse(requestId);
+        Object responseObj = connection.getResponseReader().getResponse(requestId);
+        String response = (String) responseObj;
         logger.log(Level.INFO, "Response for request " + requestId + ": " + response);
         if (response.trim().isEmpty()) {
             throw new NoResponseException();
@@ -239,10 +355,22 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
 
 
     public synchronized Tag readSingle(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        ResponseEvaluator re = sendRequestFrame(finalizeRequestMessage(Command.R, CommandType.SS, "01" + tag.formatToRequest(), null));
-        String data = re.getResponse().getStructrizedDataArea();
-        tag.setValueAsHexString(data.substring(4));
-        return tag;
+        try {
+            Object request = protocolHandler.buildReadRequest(tag, CommandType.SS);
+            Object response = sendRequestFrameGeneric(request);
+            String dataHex = protocolHandler.parseResponse(response);
+
+            // For Cnet compatibility, extract data from position 4 onwards if it's in the old format
+            if (dataHex.length() > 4 && !connection.isBinaryProtocol()) {
+                dataHex = dataHex.substring(4);
+            }
+
+            tag.setValueAsHexString(dataHex);
+            return tag;
+        } catch (Exception e) {
+            logger.severe("Error reading tag: " + e.getMessage());
+            throw new IOException("Error reading tag: " + e.getMessage(), e);
+        }
     }
 
 
@@ -262,117 +390,90 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
 
 
     public synchronized Response writeSingle(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        if (tag.getDataType() != DataType.Word) {
-            throw new IllegalArgumentException("This tag type is not a Word type!");
+        try {
+            Object request = protocolHandler.buildWriteRequest(tag, CommandType.SS);
+            Object response = sendRequestFrameGeneric(request);
+
+            // For Cnet compatibility, return ResponseEvaluator response
+            if (connection.isBinaryProtocol()) {
+                // FENet - create a simple ACK response
+                return new AckResponse();
+            } else {
+                // Cnet - use existing logic
+                ResponseEvaluator re = new ResponseEvaluator((String) response);
+                return re.getResponse();
+            }
+        } catch (Exception e) {
+            logger.severe("Error writing tag: " + e.getMessage());
+            throw new IOException("Error writing tag: " + e.getMessage(), e);
         }
-        String numberOfBlocks = "01";
-        String deviceLenAndName = tag.formatToRequest();
-        String tagValue = tag.getValueAsHexString();
-        StringBuilder data = new StringBuilder();
-        data.append(numberOfBlocks);
-        data.append(deviceLenAndName);
-        data.append(tagValue);
-        String request = finalizeRequestMessage(Command.W, CommandType.SS, data.toString(), null);
-        ResponseEvaluator re = sendRequestFrame(request);
-        return re.getResponse();
     }
 
 
     public synchronized Response writeDouble(Tag tag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
+        try {
+            Object request = protocolHandler.buildWriteDoubleRequest(tag);
+            Object response = sendRequestFrameGeneric(request);
 
-        /*
-        ENQ
-        02
-        w
-        SB
-        06
-        %DW220R
-        02
-        022B __ Decimal 555
-        0000
-        EOT
-        29
-        */
-        if (tag.getDataType() != DataType.Dword) {
-            throw new IllegalArgumentException("This tag type is not a DoubleWord type!");
+            // For Cnet compatibility, return ResponseEvaluator response
+            if (connection.isBinaryProtocol()) {
+                // FENet - create a simple ACK response
+                return new AckResponse();
+            } else {
+                // Cnet - use existing logic
+                ResponseEvaluator re = new ResponseEvaluator((String) response);
+                return re.getResponse();
+            }
+        } catch (Exception e) {
+            logger.severe("Error writing double tag: " + e.getMessage());
+            throw new IOException("Error writing double tag: " + e.getMessage(), e);
         }
-        String numberOfBlocks = "02";
-        String deviceLenAndName = tag.formatToRequest();
-        String tagValue = tag.getValueAsHexString();
-        StringBuilder data = new StringBuilder();
-        String includedDoubleAddr = XGBCNetUtil.multiplyAddress(deviceLenAndName, 2);
-        //PLC DD diye bir adres tanımıyor!
-        includedDoubleAddr = includedDoubleAddr.replace("DD", "DW");
-        data.append(includedDoubleAddr);
-        data.append(numberOfBlocks);
-        data.append(XGBCNetUtil.swap(tagValue));
-        String request = finalizeRequestMessage(Command.W, CommandType.SB, data.toString(), null);
-        ResponseEvaluator re = sendRequestFrame(request);
-        return re.getResponse();
     }
 
 
     public synchronized Response writeSingleString(Tag tag, String strData, int theLimitToWrite) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        /*
-    Sample write data
-    ENQ
-    0 2
-    w S B
-    0 6
-    % D W 8 8 6
-    0 D
-    5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4 5 4
-    EOT
-    6 1
-    */
-        if ((tag.getDataType() != DataType.Word)) {
-            throw new IllegalArgumentException("The tag's data type must be a word when reading a string!");
+        try {
+            Object request = protocolHandler.buildWriteStringRequest(tag, strData, theLimitToWrite);
+            Object response = sendRequestFrameGeneric(request);
+
+            // For Cnet compatibility, return ResponseEvaluator response
+            if (connection.isBinaryProtocol()) {
+                // FENet - create a simple ACK response
+                return new AckResponse();
+            } else {
+                // Cnet - use existing logic
+                ResponseEvaluator re = new ResponseEvaluator((String) response);
+                return re.getResponse();
+            }
+        } catch (Exception e) {
+            logger.severe("Error writing string tag: " + e.getMessage());
+            throw new IOException("Error writing string tag: " + e.getMessage(), e);
         }
-        if (theLimitToWrite > 64) {
-            throw new IllegalArgumentException("The parameter theLimitToWrite must not be greater than 64!");
-        }
-        if (strData.length() > theLimitToWrite) { // The given string length is greater than the target.
-            strData = strData.substring(0, strData.length() - (strData.length() - theLimitToWrite));
-        }
-        while (strData.length() < theLimitToWrite) {// The given string length is lower...
-            strData += " ";
-        }
-        StringBuilder data = new StringBuilder();
-        String deviceLenAndName = tag.formatToRequest();
-        data.append(deviceLenAndName);
-        int stringLen = strData.length();
-        if (stringLen % 2 != 0) {
-            strData = strData + " ";
-            stringLen++;
-        }
-        int _len = stringLen;
-        if (tag.getDataType() == DataType.Word)
-            _len /= 2;
-        String lenInHex = Integer.toHexString(_len);
-        data.append(XGBCNetUtil.addZeroIfNeed(lenInHex));
-        strData = XGBCNetUtil.convertTurkishToEnglish(strData);
-        byte[] bytes = Arrays.copyOf(strData.getBytes(StandardCharsets.US_ASCII), stringLen);
-        for (byte b : bytes) {
-            String s = XGBCNetUtil.addZeroIfNeed(Integer.toHexString(b));
-            data.append(s);
-        }
-        String request = finalizeRequestMessage(Command.W, CommandType.SB, data.toString(), null);
-        ResponseEvaluator re = sendRequestFrame(request);
-        return re.getResponse();
     }
 
 
     public synchronized Response writeBit(Tag tag, boolean flag) throws IOException, NoAcknowledgeMessageFromThePLCException, NoResponseException, FrameCheckException {
-        if (tag.getDataType() != DataType.Bit) {
-            throw new IllegalArgumentException("This tag type is not a Bit type!");
-        }
-        String value = flag ? "01" : "00";
-        String request = finalizeRequestMessage(Command.W, CommandType.SS, "01" + tag.formatToRequest() + value, null);
-        ResponseEvaluator re = sendRequestFrame(request);
-        if (re.getResponse() instanceof AckResponse) {
+        try {
+            Object request = protocolHandler.buildWriteBitRequest(tag, flag);
+            Object response = sendRequestFrameGeneric(request);
+
+            // Update tag value on success
+            String value = flag ? "01" : "00";
             tag.setValueAsHexString(value);
+
+            // For Cnet compatibility, return ResponseEvaluator response
+            if (connection.isBinaryProtocol()) {
+                // FENet - create a simple ACK response
+                return new AckResponse();
+            } else {
+                // Cnet - use existing logic
+                ResponseEvaluator re = new ResponseEvaluator((String) response);
+                return re.getResponse();
+            }
+        } catch (Exception e) {
+            logger.severe("Error writing bit tag: " + e.getMessage());
+            throw new IOException("Error writing bit tag: " + e.getMessage(), e);
         }
-        return re.getResponse();
     }
 
 
@@ -385,6 +486,11 @@ public class XGBCNetClient implements SerialReader.SerialReaderObserver, TCPRead
 
     @Override
     public void onDataReceived(String data, String requestId) {
+        connection.getResponseReader().setResponse(requestId, data);
+    }
+
+    @Override
+    public void onDataReceived(Object data, String requestId) {
         connection.getResponseReader().setResponse(requestId, data);
     }
 }

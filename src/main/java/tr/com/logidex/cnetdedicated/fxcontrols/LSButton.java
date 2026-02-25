@@ -53,27 +53,23 @@ public class LSButton extends Button {
     private boolean touchHandled = false;
 
     public LSButton() {
-        // Touch event handlers - will fire on touch devices
+        // Touch event handlers — e.consume() yok, synthesized mouse event'ler de üretilecek
         setOnTouchPressed(e -> {
             touchHandled = true;
             pressed();
-            e.consume(); // Consume to prevent mouse event synthesis
         });
         setOnTouchReleased(e -> {
             released();
             touchHandled = false;
-            e.consume(); // Consume to prevent mouse event synthesis
         });
 
-        // Mouse event handlers - will fire on mouse devices or from synthesized touch events
+        // Mouse event handlers — touch'tan gelen synthesized event'leri touchHandled flag ile engelle
         setOnMousePressed(e -> {
-            // Handle if: real mouse click OR synthesized from touch (when touch handlers don't fire)
             if (!touchHandled) {
                 pressed();
             }
         });
         setOnMouseReleased(e -> {
-            // Handle if: real mouse click OR synthesized from touch (when touch handlers don't fire)
             if (!touchHandled) {
                 released();
             }

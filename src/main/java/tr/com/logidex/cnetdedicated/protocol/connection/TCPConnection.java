@@ -54,7 +54,19 @@ public class TCPConnection implements Connection {
 
 
     @Override
+    public void sendRequest(byte[] requestMessage, String requestId) throws IOException {
+        tcpReader.sendRequest(requestMessage, requestId);
+    }
+
+
+    @Override
     public ResponseReader getResponseReader() {
         return tcpReader;
+    }
+
+
+    @Override
+    public boolean isBinaryProtocol() {
+        return true; // TCP connection uses FENet binary protocol
     }
 }

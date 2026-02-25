@@ -67,7 +67,19 @@ public class SerialConnection implements Connection {
 
 
     @Override
+    public void sendRequest(byte[] requestMessage, String requestId) throws IOException {
+        throw new UnsupportedOperationException("Serial connection does not support binary protocol");
+    }
+
+
+    @Override
     public ResponseReader getResponseReader() {
         return serialReader;
+    }
+
+
+    @Override
+    public boolean isBinaryProtocol() {
+        return false;
     }
 }
